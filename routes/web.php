@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\BalanceApiController;
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubmitDataController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,12 +27,27 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/api/balance', [BalanceApiController::class,'balanceApi']);
+
+Route::group(['prefix'=> '/api'], function () {
+    Route::get('/balance', [ApiController::class,'balance']);
+    Route::get('/categories',[ApiController::class, "categories"]);
+    Route::get('/tags',[ApiController::class, "tags"]);
+    Route::get('/types',[ApiController::class, "types"]);
+    Route::get('/methods',[ApiController::class, "methods"]);
+    Route::post("/submit-income-expense", [SubmitDataController::class, "submitIncomeExpense"]);
+});
 
 Route::get("/balance-check", function ()
 {
     return Inertia::render("Balance", []);
 });
+
+Route::get("/data-submit", function()
+{
+    return Inertia::render("DataSubmit", []);
+});
+
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

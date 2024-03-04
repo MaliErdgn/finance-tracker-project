@@ -26,4 +26,12 @@ class ExpenseIncome extends Model
     {
         return $this->belongsTo(Types::class);
     }
+    protected $fillable = [
+        'amount',
+        'time',
+        'description',
+        'type_id',
+        'tag_id',
+        'method_id',
+    ];
 }

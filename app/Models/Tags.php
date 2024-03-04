@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Tags extends Model
 {
     use HasFactory;
+    public function getTagsByCategory($category_id) {
+        $tags = Tags::where('category_id', $category_id)->get();
+
+        return $tags;
+    }
 
     public function category()
     {
