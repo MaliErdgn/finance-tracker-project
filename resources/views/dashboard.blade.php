@@ -22,10 +22,10 @@
                     <th scope="col">Type</th>
                     <th scope="col">Amount</th>
                     <th scope="col">Time</th>
-                    <th scope="col">Description</th>
                     <th scope="col">Tag Name</th>
                     <th scope="col">Category Name</th>
                     <th scope="col">Method</th>
+                    <th scope="col">Description</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,10 +39,10 @@
                         <td>{{ $item->type->type_name }}</td>
                         <td>{{ $item->amount }}</td>
                         <td>{{ \Carbon\Carbon::parse($item->time)->format("d m Y") }}</td>
-                        <td>{{ $item->description }}</td>
                         <td>{{ $item->tag->tag_name }}</td>
                         <td>{{ optional($item->tag->category)->category_name }}</td>
                         <td>{{ $item->method->method_name }}</td>
+                        <td>{{ $item->description }}</td>
                     </tr>
                 @endforeach
             </tbody>
