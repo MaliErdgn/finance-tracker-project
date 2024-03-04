@@ -40,12 +40,12 @@ Route::group(['prefix'=> '/api'], function () {
 Route::get("/balance-check", function ()
 {
     return Inertia::render("Balance", []);
-});
+})->name("balance-check");
 
 Route::get("/data-submit", function()
 {
     return Inertia::render("DataSubmit", []);
-});
+})->name("data-submit");
 
 
 

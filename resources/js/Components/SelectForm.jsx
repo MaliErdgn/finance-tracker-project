@@ -1,14 +1,14 @@
 import React from 'react';
+import Form from 'react-bootstrap/Form';
 
 export default function SelectForm({ label, name, value, onChange, classNames, required, options, optionKey, optionValue }) {
     const className = `form-control ${classNames || ""}`;
 
     return (
-        <div className="mb-3">
-            <label htmlFor={name} className="form-label">
-                {label}:
-            </label>
-            <select
+        <Form.Group className="mb-3">
+            <Form.Label htmlFor={name}>{label}:</Form.Label>
+            <Form.Control
+                as="select"
                 className={className}
                 id={name}
                 name={name}
@@ -22,7 +22,7 @@ export default function SelectForm({ label, name, value, onChange, classNames, r
                         {option[optionValue]}
                     </option>
                 ))}
-            </select>
-        </div>
+            </Form.Control>
+        </Form.Group>
     );
 }

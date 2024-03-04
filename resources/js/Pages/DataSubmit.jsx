@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../bootstrap.js";
-import InputForm from "../Components/InputForm.jsx"
-import SelectForm from "../Components/SelectForm.jsx"
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import InputForm from "../Components/InputForm.jsx";
+import SelectForm from "../Components/SelectForm.jsx";
 
 const DataSubmit = () => {
     const [formData, setFormData] = useState({
@@ -24,7 +26,6 @@ const DataSubmit = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Fetch categories, tags, types concurrently
         const fetchData = async () => {
             try {
                 const [categoriesResponse, tagsResponse, typesResponse, methodsResponse] = await Promise.all([
@@ -39,7 +40,7 @@ const DataSubmit = () => {
                 setTypes(typesResponse.data);
                 setMethods(methodsResponse.data)
 
-                setLoading(false); // Set loading to false once all data is fetched
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -49,7 +50,7 @@ const DataSubmit = () => {
     }, []);
 
     const handleInputChange = (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setFormData({
             ...formData,
             [name]: value,
@@ -62,25 +63,14 @@ const DataSubmit = () => {
         }
     };
 
-    const fetchTags = (category_id) => {
-        //fetch the tags on selected category
-        axios.get(`/api/tags?category_id=${category_id}`)
-        .then(response => {
-            setTags(response.data);
-        })
-        .catch(error => {
-            console.error("Error fetching tags:", error)
-        })
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            console.log("Submitting data:", formData); // Log to check the data being sent
+            console.log("Submitting data:", formData);
             const response = await axios.post("/api/submit-income-expense", formData);
 
-            setFormData({   //Reset the form
+            setFormData({
                 type_id: "",
                 amount: "",
                 time: "",
@@ -88,10 +78,11 @@ const DataSubmit = () => {
                 category: "",
                 tag_id: "",
                 method_id: "",
-            })
-            console.log("Data submitted successfully:", response.data); // Log success message
+            });
+
+            console.log("Data submitted successfully:", response.data);
         } catch (error) {
-            console.error("Data submit unsuccesfull", error);
+            console.error("Data submit unsuccessful", error);
         }
     };
 
@@ -105,8 +96,7 @@ const DataSubmit = () => {
 
     return (
         <div>
-            <h1>Expense Form</h1>
-            <form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} method="POST" className="w-50 mx-auto mt-3">
                 <SelectForm
                     label="Type"
                     type="select"
@@ -120,76 +110,76 @@ const DataSubmit = () => {
                 />
 
                 <InputForm
-                label="Amount"
-                type="number"
-                name="amount"
-                value={formData.amount}
-                onChange={handleInputChange}
-                classNames=""
-                required= {true}
+                    label="Amount"
+                    type="number"
+                    name="amount"
+                    value={formData.amount}
+                    onChange={handleInputChange}
+                    classNames=""
+                    required={true}
                 />
 
                 <InputForm
-                label="Time"
-                type="date"
-                name="time"
-                value={formData.time}
-                onChange={handleInputChange}
-                classNames=""
-                required={true}
+                    label="Time"
+                    type="date"
+                    name="time"
+                    value={formData.time}
+                    onChange={handleInputChange}
+                    classNames=""
+                    required={true}
                 />
 
                 <SelectForm
-                label="Category"
-                type="select"
-                name="category"
-                onChange={handleInputChange}
-                options={categories}
-                optionKey="id"
-                optionValue="category_name"
-                required={true}
+                    label="Category"
+                    type="select"
+                    name="category"
+                    onChange={handleInputChange}
+                    options={categories}
+                    optionKey="id"
+                    optionValue="category_name"
+                    required={true}
                 />
 
                 <SelectForm
-                label="Tag"
-                type="select"
-                name="tag_id"
-                value={formData.tag_id}
-                onChange={handleInputChange}
-                options={filteredTags}
-                optionKey="id"
-                optionValue="tag_name"
-                required={true}
+                    label="Tag"
+                    type="select"
+                    name="tag_id"
+                    value={formData.tag_id}
+                    onChange={handleInputChange}
+                    options={filteredTags}
+                    optionKey="id"
+                    optionValue="tag_name"
+                    required={true}
                 />
 
                 <SelectForm
-                label="Method"
-                type="select"
-                name="method_id"
-                classNames=""
-                value={formData.method_id}
-                onChange={handleInputChange}
-                options={methods}
-                optionKey="id"
-                optionValue="method_name"
-                required={true}
+                    label="Method"
+                    type="select"
+                    name="method_id"
+                    classNames=""
+                    value={formData.method_id}
+                    onChange={handleInputChange}
+                    options={methods}
+                    optionKey="id"
+                    optionValue="method_name"
+                    required={true}
                 />
                 <InputForm
-                label="Description"
-                type="input"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                classNames=""
-                required={false}
+                    label="Description"
+                    type="input"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    classNames=""
+                    required={false}
                 />
 
-                <button type="submit" className="btn btn-success text-slate-950">Submit</button>
-
-            </form>
+                <Button variant="primary" className="text-slate-950"type="submit">
+                    Submit
+                </Button>
+            </Form>
         </div>
     )
-
 }
 
 export default DataSubmit;

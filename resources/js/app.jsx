@@ -4,6 +4,8 @@ import '../css/app.css';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import Layout from './Pages/Layout';
+import { BrowserRouter } from 'react-router-dom';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -13,7 +15,13 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(
+        <BrowserRouter>
+        <Layout>
+        <App {...props} />
+        </Layout>
+        </BrowserRouter>
+        );
     },
     progress: {
         color: '#4B5563',
