@@ -37,21 +37,21 @@ Route::group(['prefix'=> '/api'], function () {
     Route::post("/submit-income-expense", [SubmitDataController::class, "submitIncomeExpense"]);
 });
 
-Route::get("/balance-check", function ()
+Route::get("/dashboard", function ()
 {
-    return Inertia::render("Balance", []);
-})->name("balance-check");
+    return Inertia::render("Dashboard", []);
+})->name("dashboard");
 
 Route::get("/data-submit", function()
 {
     return Inertia::render("DataSubmit", []);
 })->name("data-submit");
 
+Route::get("/insights", function() {
+    return Inertia::render("Insights", []);
+})->name("insights");
 
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
