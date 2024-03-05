@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\DeleteUpdateController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubmitDataController;
 use Illuminate\Foundation\Application;
@@ -50,6 +51,9 @@ Route::get("/data-submit", function()
 Route::get("/insights", function() {
     return Inertia::render("Insights", []);
 })->name("insights");
+
+Route::patch("/update-data/{id}",[DeleteUpdateController::class, "update"]);
+
 
 
 

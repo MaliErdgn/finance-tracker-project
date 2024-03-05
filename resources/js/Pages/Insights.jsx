@@ -143,7 +143,7 @@ const Insights = () => {
 
     return (
         <div className="w-100">
-            <div className="mx-auto chart-container mb-5" style={{ width: "1000px", height: "250px" }}>
+            <div className="mx-auto chart-container mb-5 mt-3" style={{ width: "1000px", height: "250px" }}>
                 <h2 className="text-center mb-3">Daily Balance Chart</h2>
                 <canvas ref={lineChartRef} id="lineChartCanvas" width="400" height="100" aria-label="Balance Chart" role="img"></canvas>
             </div>

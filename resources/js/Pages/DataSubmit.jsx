@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputForm from "../Components/InputForm.jsx";
 import SelectForm from "../Components/SelectForm.jsx";
+import EditExpInc from "@/Components/EditExpInc.jsx";
 
 const DataSubmit = () => {
     const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ const DataSubmit = () => {
         method_id: "",
     });
 
+    const [data, setData] = useState([])
     const [categories, setCategories] = useState([]);
     const [allTags, setAllTags] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -24,21 +26,24 @@ const DataSubmit = () => {
     const [types, setTypes] = useState([]);
     const [methods, setMethods] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedBalanceId, setSelectedBalanceId] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [categoriesResponse, tagsResponse, typesResponse, methodsResponse] = await Promise.all([
+                const [categoriesResponse, tagsResponse, typesResponse, methodsResponse, dataResponse] = await Promise.all([
                     axios.get("/api/categories"),
                     axios.get("/api/tags"),
                     axios.get("/api/types"),
-                    axios.get("/api/methods")
+                    axios.get("/api/methods"),
+                    axios.get("/api/balance")
                 ]);
 
                 setCategories(categoriesResponse.data);
                 setAllTags(tagsResponse.data);
                 setTypes(typesResponse.data);
                 setMethods(methodsResponse.data)
+                setData(dataResponse.data)
 
                 setLoading(false);
             } catch (error) {
@@ -85,6 +90,13 @@ const DataSubmit = () => {
             console.error("Data submit unsuccessful", error);
         }
     };
+
+    const handleEditData = (id) => {
+        console.log("Editing balance with ID:", id);
+        setSelectedBalanceId(id);
+        // Additional logic if needed
+    };
+
 
     if (loading) {
         return (
@@ -174,10 +186,35 @@ const DataSubmit = () => {
                     required={false}
                 />
 
-                <Button variant="primary" className="text-slate-950"type="submit">
+                <Button variant="primary" className="text-slate-950" type="submit">
                     Submit
                 </Button>
             </Form>
+
+        {/* Display the list of balances for editing */}
+        <ul>
+            {data.map(data => (
+                <li key={data.id}>
+                    {data.amount} - {data.time}{' '}
+                    <Button variant="link" onClick={() => handleEditData(data.id)}>
+                        Edit
+                    </Button>
+                </li>
+            ))}
+        </ul>
+
+        {selectedBalanceId && (
+        <EditExpInc
+            formData={data.find(item => item.id === selectedBalanceId)}
+            categories={categories}
+            filteredTags={allTags}
+            methods={methods}
+            onCancel={() => setSelectedBalanceId(null)}
+        />
+        )}
+
+
+
         </div>
     )
 }
