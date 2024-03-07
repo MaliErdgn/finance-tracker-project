@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { Table, Button, ButtonGroup } from 'react-bootstrap';
+import { Table, Button, Toast, ToastContainer } from 'react-bootstrap';
 import Chart from 'chart.js/auto';
 
 const Balance = () => {
@@ -16,6 +16,7 @@ const Balance = () => {
     const [filteredTags, setFilteredTags] = useState([]);
     const [types, setTypes] = useState([]);
     const [methods, setMethods] = useState([]);
+    const [isUpdating, setIsUpdating] = useState(false)
 
 
     useEffect(() => {
@@ -72,8 +73,9 @@ const Balance = () => {
         setTotalBalance(income - expense);
     };
 
-    const handleEdit = (id, category, tag, method, type) => {
-        console.log("Editing Props props:",  id, category, tag, method, type);
+    const handleEdit = (id) => {
+        console.log("Editing Props props:",  id);
+        setIsUpdating(true)
         setSelectedBalanceId(id);
     }
 
@@ -112,18 +114,24 @@ const Balance = () => {
                             <td>{item.method.method_name}</td>
                             <td>{item.description}</td>
                             <td>
-                                    <Button type="button" variant="info" className="mr-3" onClick={() =>
-                                        handleEdit(item.id,
-                                                    item.tag.category.category_name,
-                                                    item.tag.tag_name,
-                                                    item.method.method_name,
-                                                    item.type.type_name)}>Edit</Button>
-                                    <Button type="button" variant="danger" onClick={() => handleDelete(item.id)}>Delete</Button>
+                                    <Button type="button" variant="info" className="mr-3 bg-info" onClick={() =>
+                                        handleEdit(item.id)}>Edit</Button>
+                                    <Button type="button" variant="danger" className="bg-danger" onClick={() => handleDelete(item.id)}>Delete</Button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
+            <ToastContainer position="middle-center">
+                <Toast bg="primary" show={isUpdating} onClose={() => setIsUpdating(false)}>
+                    <Toast.Header closeLabel="Cancel">
+                                            sa"
+                    </Toast.Header>
+                    <Toast.Body>
+                                            as
+                    </Toast.Body>
+                </Toast>
+            </ToastContainer>
             <div className="totals mt-3">
                 <h2>Total Income: {totalIncome !== undefined ? totalIncome.toFixed(2) : 'Loading...'}</h2>
                 <h2>Total Expense: {totalExpense !== undefined ? totalExpense.toFixed(2) : 'Loading...'}</h2>

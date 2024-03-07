@@ -17,7 +17,7 @@ export default function SelectForm({ label, name, value, onChange, classNames, r
                 required={required}
             >
                 <option value="">Select {label}</option>
-                {options.map((option) => (
+                {options?.map((option) => (
                     <option key={option[optionKey]} value={option[optionKey]}>
                         {option[optionValue]}
                     </option>
