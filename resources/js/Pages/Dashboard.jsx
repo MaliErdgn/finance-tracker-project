@@ -56,9 +56,9 @@ const Balance = () => {
         };
     }, []);
 
-    useEffect(() => {
-        console.log(selectedData)
-    }, [selectedBalanceId, data]);
+    // useEffect(() => {
+    //     console.log(selectedData)
+    // }, [selectedBalanceId, data]);
 
     const calculateTotals = (data) => {
         let income = 0;
@@ -136,7 +136,7 @@ const Balance = () => {
                     <Toast.Body>
                         <EditExpenseIncome
                         id={selectedBalanceId}
-                        data={data}
+                        data={selectedData}
                         types={types}
                         categories={categories}
                         methods={methods}

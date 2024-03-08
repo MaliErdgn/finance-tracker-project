@@ -19,22 +19,19 @@ const EditExpenseIncome = (id, data, types, categories, methods, allTags ) => {
 
     const [filteredTags, setFilteredTags] = useState([]);
 
-        useEffect(() => {
-            console.log("Id ", id)
-            console.log("Data ", data)
-            console.log("Types ", types)
-            console.log("Categories ", categories)
-            console.log("methods ", methods)
-            console.log("allTags ", allTags)
-        })
+    useEffect(() => {
+        console.log("Id: ", id)
+        const a = (Object.keys(id).map(([keyName, valueName]) => console.log("Key is:", keyName," Value is ", valueName)))
+        console.log(a)
+    })
 
-        const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
 
-        }
+    }
 
-        const handleInputChange = async (e) => {
+    const handleInputChange = async (e) => {
 
-        }
+    }
 
     return (
         <div>
