@@ -9,8 +9,8 @@ return (
     <Container>
         <Navbar.Brand href="">Navbar</Navbar.Brand>
         <Nav className="me-auto">
-            <Nav.Link as={InertiaLink} href={route("dashboard")}>Dashboard</Nav.Link>
             <Nav.Link as={InertiaLink} href={route("data-submit")}>Data Submit</Nav.Link>
+            <Nav.Link as={InertiaLink} href={route("dashboard")}>Dashboard</Nav.Link>
             <Nav.Link as={InertiaLink} href={route("insights")}>Insights</Nav.Link>
         </Nav>
     </Container>

@@ -2,13 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { Table, Button, Toast, ToastContainer } from 'react-bootstrap';
 import Chart from 'chart.js/auto';
-
+import EditExpenseIncome from "@/Components/EditExpenseIncome";
 const Balance = () => {
     const [data, setData] = useState([]);
     const [totalIncome, setTotalIncome] = useState();
     const [totalExpense, setTotalExpense] = useState();
     const [totalBalance, setTotalBalance] = useState();
-    const [selectedBalanceId, setSelectedBalanceId] = useState(null);
+    const [selectedBalanceId, setSelectedBalanceId] = useState();
     const [editedData, setEditedData] = useState({ ...data });
     const [categories, setCategories] = useState([]);
     const [allTags, setAllTags] = useState([]);
@@ -17,6 +17,7 @@ const Balance = () => {
     const [types, setTypes] = useState([]);
     const [methods, setMethods] = useState([]);
     const [isUpdating, setIsUpdating] = useState(false)
+    const [selectedData, setSelectedData] = useState()
 
 
     useEffect(() => {
@@ -55,6 +56,9 @@ const Balance = () => {
         };
     }, []);
 
+    useEffect(() => {
+        console.log(selectedData)
+    }, [selectedBalanceId, data]);
 
     const calculateTotals = (data) => {
         let income = 0;
@@ -74,9 +78,9 @@ const Balance = () => {
     };
 
     const handleEdit = (id) => {
-        console.log("Editing Props props:",  id);
-        setIsUpdating(true)
+        setIsUpdating(true);
         setSelectedBalanceId(id);
+        setSelectedData(data.filter(item => item.id === id));
     }
 
     const handleDelete = (id) => {
@@ -114,9 +118,11 @@ const Balance = () => {
                             <td>{item.method.method_name}</td>
                             <td>{item.description}</td>
                             <td>
-                                    <Button type="button" variant="info" className="mr-3 bg-info" onClick={() =>
-                                        handleEdit(item.id)}>Edit</Button>
-                                    <Button type="button" variant="danger" className="bg-danger" onClick={() => handleDelete(item.id)}>Delete</Button>
+                                    <Button type="button" variant="info" className="mr-3 bg-info"
+                                    onClick={() => handleEdit(item.id)}>Edit</Button>
+
+                                    <Button type="button" variant="danger" className="bg-danger"
+                                    onClick={() => handleDelete(item.id)}>Delete</Button>
                             </td>
                         </tr>
                     ))}
@@ -125,10 +131,17 @@ const Balance = () => {
             <ToastContainer position="middle-center">
                 <Toast bg="primary" show={isUpdating} onClose={() => setIsUpdating(false)}>
                     <Toast.Header closeLabel="Cancel">
-                                            sa"
+                            <strong>Edit Data {data.filter(item => item === selectedBalanceId)}</strong>
                     </Toast.Header>
                     <Toast.Body>
-                                            as
+                        <EditExpenseIncome
+                        id={selectedBalanceId}
+                        data={data}
+                        types={types}
+                        categories={categories}
+                        methods={methods}
+                        allTags={allTags}
+                        />
                     </Toast.Body>
                 </Toast>
             </ToastContainer>
