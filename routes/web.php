@@ -36,6 +36,7 @@ Route::group(['prefix'=> '/api'], function () {
     Route::get('/types',[ApiController::class, "types"]);
     Route::get('/methods',[ApiController::class, "methods"]);
     Route::post("/submit-income-expense", [SubmitDataController::class, "submitIncomeExpense"]);
+    Route::put("/update-data/{id}",[DeleteUpdateController::class, "update"]);
 });
 
 Route::get("/dashboard", function ()
@@ -52,7 +53,6 @@ Route::get("/insights", function() {
     return Inertia::render("Insights", []);
 })->name("insights");
 
-Route::patch("/update-data/{id}",[DeleteUpdateController::class, "update"]);
 
 
 
