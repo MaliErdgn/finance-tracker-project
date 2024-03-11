@@ -41,22 +41,25 @@ const EditExpenseIncome = ({
 
             const initialCategoryId = initialData.tag.category_id;
 
-            const filteredTags = allTags.filter(tag => tag.category_id === initialCategoryId);
+            const filteredTags = allTags.filter(
+                (tag) => tag.category_id === initialCategoryId
+            );
             setFilteredTags(filteredTags);
         }
     }, [data, allTags]);
-
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await axios.put(`/api/update-data/${id}`, formData);
+            const response = await axios.put(
+                `/api/update-data/${id}`,
+                formData
+            );
 
             console.log("Data updated successfully:", response.data);
 
-            window.location.reload()
+            window.location.reload();
         } catch (error) {
             console.error("Data update unsuccessful", error);
         }
@@ -85,11 +88,20 @@ const EditExpenseIncome = ({
     };
 
     return (
-        <div>
+        <div
+            style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+            }}
+        >
             <Form
                 onSubmit={handleSubmit}
                 method="POST"
-                className="w-50 mx-auto mt-3"
+                style={{
+                    width: "80%",
+                    maxWidth: "1200px",
+                }}
             >
                 <SelectForm
                     label="Type"
@@ -162,12 +174,14 @@ const EditExpenseIncome = ({
 
                 <InputForm
                     label="Description"
-                    type="input"
+                    type="textarea" // Use 'textarea' type for multiline text input
                     name="description"
                     value={formData.description}
                     onChange={handleInputChange}
                     classNames=""
                     required={false}
+                    style={{ height: "100px" }} // Adjust the height as needed
+                    rows={4} // Adjust the number of visible rows as needed
                 />
 
                 <Button

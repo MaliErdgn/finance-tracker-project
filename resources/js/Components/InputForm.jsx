@@ -1,21 +1,32 @@
-import React from 'react';
-import Form from 'react-bootstrap/Form';
+import React from "react";
+import Form from "react-bootstrap/Form";
 
-export default function InputForm({ label, type, name, value, onChange, classNames, required }) {
-    const className = `form-control ${classNames || ""}`;
-
+const InputForm = ({
+    label,
+    type,
+    name,
+    value,
+    onChange,
+    classNames,
+    required,
+    style,
+    rows,
+}) => {
     return (
-        <Form.Group className="mb-3">
-            <Form.Label htmlFor={name}>{label}:</Form.Label>
+        <Form.Group className={classNames}>
+            <Form.Label>{label}</Form.Label>
             <Form.Control
                 type={type}
-                className={className}
-                id={name}
                 name={name}
                 value={value}
                 onChange={onChange}
                 required={required}
+                style={style}
+                as={type === "textarea" ? "textarea" : undefined} // Set 'as' prop for textarea
+                rows={rows} // Set the rows attribute for textarea
             />
         </Form.Group>
     );
-}
+};
+
+export default InputForm;
