@@ -17,4 +17,21 @@ class DeleteUpdateController extends Controller
             return response()->json(["error"=>"failed to update"],500);
         }
     }
+
+    public function delete($id)
+    {
+        try {
+            // Find the record by ID
+            $data = ExpenseIncome::findOrFail($id);
+
+            // Delete the record
+            $data->delete();
+
+            return response()->json(['message' => 'Data deleted successfully'], 200);
+        } catch (\Exception $e) {
+            // Handle the exception, you might want to return a proper error response
+            return response()->json(['error' => 'Error deleting data'], 500);
+        }
+    }
+
 }

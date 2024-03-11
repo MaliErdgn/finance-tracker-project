@@ -93,9 +93,21 @@ const Balance = () => {
         });
     };
 
-    const handleDelete = (id) => {
-        console.log("Deleting balance with ID:", id);
-        setSelectedBalanceId(id);
+    const handleDelete = async (id) => {
+        try {
+            // Make an API call to delete the record with the given id
+            await axios.delete(`/api/delete-data/${id}`);
+
+            // Update the local state to remove the deleted item
+            setData((prevData) => prevData.filter((item) => item.id !== id));
+
+            // If you want to recalculate totals after deletion, you can call calculateTotals function
+            calculateTotals(data);
+
+            console.log(`Data with ID ${id} deleted successfully`);
+        } catch (error) {
+            console.error(`Error deleting data with ID ${id}:`, error);
+        }
     };
 
     const formatDate = (dateString) => {

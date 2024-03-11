@@ -174,14 +174,14 @@ const EditExpenseIncome = ({
 
                 <InputForm
                     label="Description"
-                    type="textarea" // Use 'textarea' type for multiline text input
+                    type="textarea"
                     name="description"
                     value={formData.description}
                     onChange={handleInputChange}
                     classNames=""
                     required={false}
-                    style={{ height: "100px" }} // Adjust the height as needed
-                    rows={4} // Adjust the number of visible rows as needed
+                    style={{ height: "100px" }}
+                    rows={4}
                 />
 
                 <Button
