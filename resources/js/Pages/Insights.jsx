@@ -38,11 +38,11 @@ const Insights = () => {
     };
 
     const createCharts = (data) => {
-        createLineChart(data);
+        createLineChartTotalBalance(data);
         createDoughnutChart(data);
     };
 
-    const createLineChart = (data) => {
+    const createLineChartTotalBalance = (data) => {
         const groupedData = groupDataByDay(data);
         const dailyBalances = calculateDailyBalances(groupedData);
         const labels = Object.keys(dailyBalances);
@@ -124,8 +124,23 @@ const Insights = () => {
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.8)',
                         'rgba(54, 162, 235, 0.8)',
-                        'rgba(370, 162, 85, 0.8)',
-                        'rgba(120, 8, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(153, 102, 255, 0.8)',
+                        'rgba(255, 159, 64, 0.8)',
+                        'rgba(220, 20, 60, 0.8)',
+                        'rgba(0, 128, 0, 0.8)',
+                        'rgba(255, 165, 0, 0.8)',
+                        'rgba(70, 130, 180, 0.8)',
+                        'rgba(255, 0, 0, 0.8)',
+                        'rgba(0, 255, 0, 0.8)',
+                        'rgba(0, 0, 255, 0.8)',
+                        'rgba(128, 0, 128, 0.8)',
+                        'rgba(255, 215, 0, 0.8)',
+                        'rgba(0, 255, 255, 0.8)',
+                        'rgba(255, 69, 0, 0.8)',
+                        'rgba(128, 128, 128, 0.8)',
+                        'rgba(255, 140, 0, 0.8)',
                     ],
                     borderColor: "rgba(255, 255, 255, 1)",
                     borderWidth: 1,

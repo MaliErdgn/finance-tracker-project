@@ -1,23 +1,35 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { Table, Button, Toast, ToastContainer } from "react-bootstrap";
+import {
+    Table,
+    Button,
+    Toast,
+    ToastContainer,
+    Dropdown,
+} from "react-bootstrap";
 import Chart from "chart.js/auto";
 import EditExpenseIncome from "@/Components/EditExpenseIncome";
+import _ from "lodash";
+
 const Balance = () => {
     const [data, setData] = useState([]);
     const [totalIncome, setTotalIncome] = useState();
     const [totalExpense, setTotalExpense] = useState();
     const [totalBalance, setTotalBalance] = useState();
     const [selectedBalanceId, setSelectedBalanceId] = useState();
-    const [editedData, setEditedData] = useState({ ...data });
     const [categories, setCategories] = useState([]);
     const [allTags, setAllTags] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState("");
-    const [filteredTags, setFilteredTags] = useState([]);
     const [types, setTypes] = useState([]);
     const [methods, setMethods] = useState([]);
     const [isUpdating, setIsUpdating] = useState(false);
     const [selectedData, setSelectedData] = useState();
+    const [sortBy, setSortBy] = useState("time");
+    const [sortOrder, setSortOrder] = useState("asc");
+    const [sortLabel, setSortLabel] = useState();
+    const [sortConfig, setSortConfig] = useState({
+        key: "time",
+        direction: "asc",
+    });
 
     useEffect(() => {
         let mounted = true;
@@ -62,10 +74,6 @@ const Balance = () => {
         };
     }, []);
 
-    // useEffect(() => {
-    //     console.log(selectedData)
-    // }, [selectedBalanceId, data]);
-
     const calculateTotals = (data) => {
         let income = 0;
         let expense = 0;
@@ -94,6 +102,13 @@ const Balance = () => {
     };
 
     const handleDelete = async (id) => {
+        const confirmDelete = window.confirm(
+            "Are you sure you want to delete this data?"
+        );
+
+        if (!confirmDelete) {
+            return;
+        }
         try {
             // Make an API call to delete the record with the given id
             await axios.delete(`/api/delete-data/${id}`);
@@ -114,18 +129,199 @@ const Balance = () => {
         const options = { day: "2-digit", month: "2-digit", year: "numeric" };
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
+    //#region Sorting
+    const sortData = (key) => {
+        let direction = "asc";
+        if (sortConfig.key === key && sortConfig.direction === "asc") {
+            direction = "desc";
+        }
+        setSortConfig({ key, direction });
+    };
+
+    useEffect(() => {
+        const sortedData = _.orderBy(
+            data,
+            [sortConfig.key],
+            [sortConfig.direction]
+        );
+        setData(sortedData);
+    }, [sortConfig]);
+    useEffect(() => {
+        const labelMapping = {
+            time: "Time",
+            amount: "Amount",
+            "tag.tag_name": "Tag",
+            "tag.category.category_name": "Category",
+            "type.type_name": "Type",
+        };
+
+        // Get the corresponding label for the current sort key
+        setSortLabel(labelMapping[sortBy]);
+
+        // This effect will run whenever sortOrder or sortBy changes
+        const sortedData = [...data];
+
+        sortedData.sort((a, b) => {
+            const aValue = getNestedPropertyValue(a, sortBy);
+            const bValue = getNestedPropertyValue(b, sortBy);
+
+            if (typeof aValue === "string" && typeof bValue === "string") {
+                return sortOrder === "asc"
+                    ? aValue.localeCompare(bValue)
+                    : bValue.localeCompare(aValue);
+            } else if (
+                typeof aValue === "number" &&
+                typeof bValue === "number"
+            ) {
+                return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+            } else {
+                // Handle other data types or properties as needed
+                return 0; // No change in order
+            }
+        });
+
+        // Update the state with the sorted data
+        setData(sortedData);
+    }, [sortOrder, sortBy]);
+
+    function getNestedPropertyValue(obj, path) {
+        try {
+            const keys = path.split(".");
+            let nestedValue = { ...obj };
+
+            for (const key of keys) {
+                if (
+                    nestedValue &&
+                    typeof nestedValue === "object" &&
+                    key in nestedValue
+                ) {
+                    nestedValue = nestedValue[key];
+                } else {
+                    nestedValue = undefined;
+                    break;
+                }
+            }
+
+            return nestedValue;
+        } catch (error) {
+            console.error("Error:", error);
+            return undefined;
+        }
+    }
+
+    //#endregion
+
     return (
         <div>
             <Table bordered hover variant="primary">
                 <thead className="bg-primary text-light">
                     <tr>
-                        <th scope="col">Type</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Time</th>
-                        <th scope="col">Tag Name</th>
-                        <th scope="col">Category Name</th>
-                        <th scope="col">Method</th>
-                        <th scope="col">Description</th>
+                        <th
+                            scope="col"
+                            onClick={() => sortData("type.type_name")}
+                            style={{
+                                cursor: "pointer",
+                                backgroundColor:
+                                    sortConfig.key === "type.type_name"
+                                        ? "#f8f9fa"
+                                        : "",
+                            }}
+                        >
+                            Type{" "}
+                            {sortConfig.key === "type.type_name" &&
+                                `(${sortConfig.direction})`}
+                        </th>
+                        <th
+                            scope="col"
+                            onClick={() => sortData("amount")}
+                            style={{
+                                cursor: "pointer",
+                                backgroundColor:
+                                    sortConfig.key === "amount"
+                                        ? "#f8f9fa"
+                                        : "",
+                            }}
+                        >
+                            Amount{" "}
+                            {sortConfig.key === "amount" &&
+                                `(${sortConfig.direction})`}
+                        </th>
+                        <th
+                            scope="col"
+                            onClick={() => sortData("time")}
+                            style={{
+                                cursor: "pointer",
+                                backgroundColor:
+                                    sortConfig.key === "time" ? "#f8f9fa" : "",
+                            }}
+                        >
+                            Time{" "}
+                            {sortConfig.key === "time" &&
+                                `(${sortConfig.direction})`}
+                        </th>
+                        <th
+                            scope="col"
+                            onClick={() => sortData("tag.tag_name")}
+                            style={{
+                                cursor: "pointer",
+                                backgroundColor:
+                                    sortConfig.key === "tag.tag_name"
+                                        ? "#f8f9fa"
+                                        : "",
+                            }}
+                        >
+                            Tag Name{" "}
+                            {sortConfig.key === "tag.tag_name" &&
+                                `(${sortConfig.direction})`}
+                        </th>
+                        <th
+                            scope="col"
+                            onClick={() =>
+                                sortData("tag.category.category_name")
+                            }
+                            style={{
+                                cursor: "pointer",
+                                backgroundColor:
+                                    sortConfig.key ===
+                                    "tag.category.category_name"
+                                        ? "#f8f9fa"
+                                        : "",
+                            }}
+                        >
+                            Category Name{" "}
+                            {sortConfig.key === "tag.category.category_name" &&
+                                `(${sortConfig.direction})`}
+                        </th>
+                        <th
+                            scope="col"
+                            onClick={() => sortData("method.method_name")}
+                            style={{
+                                cursor: "pointer",
+                                backgroundColor:
+                                    sortConfig.key === "method.method_name"
+                                        ? "#f8f9fa"
+                                        : "",
+                            }}
+                        >
+                            Method{" "}
+                            {sortConfig.key === "method.method_name" &&
+                                `(${sortConfig.direction})`}
+                        </th>
+                        <th
+                            scope="col"
+                            onClick={() => sortData("description")}
+                            style={{
+                                cursor: "pointer",
+                                backgroundColor:
+                                    sortConfig.key === "description"
+                                        ? "#f8f9fa"
+                                        : "",
+                            }}
+                        >
+                            Description{" "}
+                            {sortConfig.key === "description" &&
+                                `(${sortConfig.direction})`}
+                        </th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
