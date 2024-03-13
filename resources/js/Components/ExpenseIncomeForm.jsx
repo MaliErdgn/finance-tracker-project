@@ -168,7 +168,7 @@ const ExpenseIncomeForm = () => {
                     required={false}
                 />
 
-                <Button variant="primary" className="text-slate-950" type="submit">
+                <Button variant="primary" className="mt-3 text-slate-950" type="submit">
                     Submit
                 </Button>
             </Form>
