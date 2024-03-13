@@ -5,9 +5,7 @@ import {
     Button,
     Toast,
     ToastContainer,
-    Dropdown,
 } from "react-bootstrap";
-import Chart from "chart.js/auto";
 import EditExpenseIncome from "@/Components/EditExpenseIncome";
 import _ from "lodash";
 
@@ -28,7 +26,7 @@ const Balance = () => {
     const [sortLabel, setSortLabel] = useState();
     const [sortConfig, setSortConfig] = useState({
         key: "time",
-        direction: "asc",
+        direction: "desc",
     });
 
     useEffect(() => {
