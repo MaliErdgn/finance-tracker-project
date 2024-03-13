@@ -18,4 +18,9 @@ class Tags extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    protected $fillable = [
+        "tag_name",
+        'category_id'
+    ];
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ExpenseIncome;
+use App\Models\Tags;
 use Illuminate\Http\Request;
 
 class SubmitDataController extends Controller
@@ -28,5 +29,13 @@ class SubmitDataController extends Controller
 
         // Return a response (you can customize this based on your needs)
         return response()->json(['message' => 'Form submitted successfully', 'data' => $result]);
+    }
+
+    public function submitTag(Request $request){
+        $validatedData = $request->validate([
+            "tag_name" => "required|string",
+            "category_id" => "required|integer"
+        ]);
+        $result = Tags::create($validatedData);
     }
 }

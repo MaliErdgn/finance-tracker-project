@@ -12,6 +12,7 @@ return (
             <Nav.Link as={InertiaLink} href={route("data-submit")}>Data Submit</Nav.Link>
             <Nav.Link as={InertiaLink} href={route("dashboard")}>Dashboard</Nav.Link>
             <Nav.Link as={InertiaLink} href={route("insights")}>Insights</Nav.Link>
+            <Nav.Link as={InertiaLink} href={route("create-tag")}>Create Tag</Nav.Link>
         </Nav>
     </Container>
 </Navbar>

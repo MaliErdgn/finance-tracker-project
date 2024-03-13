@@ -36,6 +36,7 @@ Route::group(['prefix'=> '/api'], function () {
     Route::get('/types',[ApiController::class, "types"]);
     Route::get('/methods',[ApiController::class, "methods"]);
     Route::post("/submit-income-expense", [SubmitDataController::class, "submitIncomeExpense"]);
+    Route::post("/create-tag", [SubmitDataController::class,"submitTag"]);
     Route::put("/update-data/{id}",[DeleteUpdateController::class, "update"]);
     Route::delete("/delete-data/{id}", [DeleteUpdateController::class, "delete"]);
 });
