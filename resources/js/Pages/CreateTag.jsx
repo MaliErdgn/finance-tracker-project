@@ -12,6 +12,9 @@ const CreateTag = () => {
     });
     const [categories, setCategories] = useState([]);
     const [tags, setTags] = useState([]);
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [selectedTagId, setSelectedTagId] = useState();
+    const [selectedData, setSelectedData] = useState();
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -48,11 +51,26 @@ const CreateTag = () => {
                 category_id: "",
             });
             console.log("Data Submitted successfully: ", response.data);
-            window.location.reload()
+            window.location.reload();
         } catch (error) {
             console.error(error);
         }
     };
+
+    const handleEdit = (id) => {
+        setIsUpdating(true);
+        setSelectedTagId(id);
+        setSelectedData(tags.filter((item) => item.id === id));
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        })
+
+    }
+
+    const handleDelete = async (id) => {
+        console.log("Delete Tag id: ", id)
+    }
 
     return (
         <>
@@ -96,6 +114,7 @@ const CreateTag = () => {
                     <thead className="bg-primary text-light">
                         <tr>
                             <th scope="col">{category.category_name}</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -103,7 +122,34 @@ const CreateTag = () => {
                             .filter((tag) => tag.category_id === category.id)
                             .map((tag) => (
                                 <tr className="table-row" key={tag.id}>
-                                    <td style={{ background: "var(--bs-secondary)"  }} >{tag.tag_name}</td>
+                                    <td
+                                        style={{
+                                            background: "var(--bs-secondary)",
+                                        }}
+                                    >
+                                        {tag.tag_name}
+                                    </td>
+                                    <td>
+                                        {" "}
+                                        <Button
+                                            type="button"
+                                            variant="info"
+                                            className="mr-3 bg-info"
+                                            onClick={() => handleEdit(tag.id)}
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="danger"
+                                            className="bg-danger"
+                                            onClick={() =>
+                                                handleDelete(tag.id)
+                                            }
+                                        >
+                                            Delete
+                                        </Button>
+                                    </td>
                                 </tr>
                             ))}
                     </tbody>
