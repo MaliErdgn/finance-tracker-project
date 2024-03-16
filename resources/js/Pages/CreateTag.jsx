@@ -4,6 +4,7 @@ import InputForm from "@/Components/InputForm";
 import SelectForm from "@/Components/SelectForm";
 import { Axios } from "axios";
 import { useEffect } from "react";
+import EditTags from "@/Components/EditTags"
 
 const CreateTag = () => {
     const [formData, setFormData] = useState({
@@ -64,13 +65,12 @@ const CreateTag = () => {
         window.scrollTo({
             top: 0,
             behavior: "smooth",
-        })
-
-    }
+        });
+    };
 
     const handleDelete = async (id) => {
-        console.log("Delete Tag id: ", id)
-    }
+        console.log("Delete Tag id: ", id);
+    };
 
     return (
         <>
@@ -143,9 +143,7 @@ const CreateTag = () => {
                                             type="button"
                                             variant="danger"
                                             className="bg-danger"
-                                            onClick={() =>
-                                                handleDelete(tag.id)
-                                            }
+                                            onClick={() => handleDelete(tag.id)}
                                         >
                                             Delete
                                         </Button>
@@ -155,6 +153,33 @@ const CreateTag = () => {
                     </tbody>
                 </Table>
             ))}
+            <ToastContainer position="middle-center">
+                <Toast
+                    bg="primary"
+                    show={isUpdating}
+                    onClose={() => setIsUpdating(false)}
+                >
+                    <Toast.Header closeLabel="Cancel" closeButton={false}>
+                        <strong>
+                            Edit Data{" "}
+                        </strong>
+                        <Button
+                            type="button"
+                            variant="primary"
+                            className="ml-auto text-slate-950"
+                            onClick={() => setIsUpdating(false)}
+                        >
+                            Close
+                        </Button>
+                    </Toast.Header>
+                    <Toast.Body className="d-flex justify-content-center align-items-center">
+                        <EditTags
+                        id
+                        //DOCKER ERROR
+                        />
+                    </Toast.Body>
+                </Toast>
+            </ToastContainer>
         </>
     );
 };
