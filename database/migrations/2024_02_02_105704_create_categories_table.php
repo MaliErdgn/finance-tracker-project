@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->integer('category_order');
             $table->string('category_name');
             $table->timestamps();
         });
