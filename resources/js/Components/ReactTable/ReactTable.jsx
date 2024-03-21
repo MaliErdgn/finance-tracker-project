@@ -1,53 +1,172 @@
 import React from "react";
-import { Box, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import { Box, Table, Thead, Tbody, Tr, Th, Td, Button } from "@chakra-ui/react";
 import {
     useReactTable,
     getCoreRowModel,
     flexRender,
     getSortedRowModel,
 } from "@tanstack/react-table";
+import DescriptionCell from "./Cells/DescriptionCell";
 import { useState } from "react";
+import AmountCell from "./Cells/AmountCell";
+import TypeCell from "./Cells/TypeCell";
+import TimeCell from "./Cells/TimeCell";
+import TagNameCell from "./Cells/TagNameCell";
+import CategoryNameCell from "./Cells/CategoryNameCell";
+import MethodCell from "./Cells/MethodCell";
 
-const columns = [
-    {
-        accessorKey: "type.type_name",
-        header: "Type",
-        cell: (props) => <p>{props.getValue()}</p>,
-    },
-    {
-        accessorKey: "amount",
-        header: "Amount",
-        cell: (props) => <p>{props.getValue()}</p>,
-    },
-    {
-        accessorKey: "time",
-        header: "Time",
-        cell: (props) => <p>{props.getValue()}</p>,
-    },
-    {
-        accessorKey: "tag.tag_name",
-        header: "Tag Name",
-        cell: (props) => <p>{props.getValue()}</p>,
-    },
-    {
-        accessorKey: "tag.category.category_name",
-        header: "Category Name",
-        cell: (props) => <p>{props.getValue()}</p>,
-    },
-    {
-        accessorKey: "method.method_name",
-        header: "Method",
-        cell: (props) => <p>{props.getValue()}</p>,
-    },
-    {
-        accessorKey: "description",
-        header: "Description",
-        cell: (props) => <p>{props.getValue()}</p>,
-    },
-];
-
-const ReactTable = ({ data }) => {
+const ReactTable = ({ data, categories, allTags, types, methods, handleCategoryChange, selectedCategoryId }) => {
     const [sorting, setSorting] = React.useState([]);
+    const [editableRow, setEditableRow] = useState(null);
+
+
+    const toggleEditMode = (rowId) => {
+        if (editableRow === rowId) {
+            setEditableRow(null);
+        } else {
+            setEditableRow(rowId);
+        }
+    };
+    const handleSubmit = (rowId) => {
+        setEditableRow(null);
+    };
+
+    const handleDiscard = () => {
+        setEditableRow(null);
+    };
+
+    const handleDelete = () => {
+        console.log("deleting data: ", data[0]);
+    };
+
+    const handleDataChange = (rowId, newValue) => {
+            console.log("ID: ", rowId);
+            console.log("Value: ", newValue);
+    };
+    const columns = [
+        {
+            accessorKey: "type.type_name",
+            header: "Type",
+            cell: ({ getValue, row }) => (
+                <TypeCell
+                    getValue={getValue}
+                    onDataChange={handleDataChange}
+                    rowId={data[row.id].id}
+                    editMode={editableRow === row.id}
+                    toggleEditMode={() => toggleEditMode(row.id)}
+                    types={types}
+                />
+            ),
+        },
+        {
+            accessorKey: "amount",
+            header: "Amount",
+            size: 100,
+            cell: ({getValue, row}) => (
+                <AmountCell
+                getValue={getValue}
+                onDataChange={handleDataChange}
+                rowId={data[row.id].id}
+                editMode={editableRow === row.id}
+                toggleEditMode={() => toggleEditMode(row.id)}
+            />
+            ),
+        },
+        {
+            accessorKey: "time",
+            header: "Time",
+            cell: ({getValue,  row}) => (
+                <TimeCell
+                getValue={getValue}
+                onDataChange={handleDataChange}
+                rowId={data[row.id].id}
+                editMode={editableRow === row.id}
+                toggleEditMode={() => toggleEditMode(row.id)}
+                />
+            ),
+        },
+        {
+            accessorKey: "tag.category.category_name",
+            header: "Category Name",
+            cell: ({getValue,  row}) => (
+                <CategoryNameCell
+                getValue={getValue}
+                onDataChange={handleDataChange}
+                rowId={data[row.id].id}
+                editMode={editableRow === row.id}
+                toggleEditMode={() => toggleEditMode(row.id)}
+                categories={categories}
+                onSelectCategory={handleCategoryChange}
+                />
+            ),
+        },
+        {
+            accessorKey: "tag.tag_name",
+            header: "Tag Name",
+            cell: ({getValue,  row}) => (
+                <TagNameCell
+                getValue={getValue}
+                onDataChange={handleDataChange}
+                rowId={data[row.id].id}
+                editMode={editableRow === row.id}
+                toggleEditMode={() => toggleEditMode(row.id)}
+                allTags={allTags}
+                selectedCategoryId={selectedCategoryId}
+                />
+            ),
+        },
+        {
+            accessorKey: "method.method_name",
+            header: "Method",
+            cell: ({getValue,  row}) => (
+                <MethodCell
+                getValue={getValue}
+                onDataChange={handleDataChange}
+                rowId={data[row.id].id}
+                editMode={editableRow === row.id}
+                toggleEditMode={() => toggleEditMode(row.id)}
+                methods={methods}
+                />
+            ),
+        },
+        {
+            accessorKey: "description",
+            header: "Description",
+            cell: ({ getValue, row }) => (
+                <DescriptionCell
+                    getValue={getValue}
+                    onDataChange={handleDataChange}
+                    rowId={data[row.id].id}
+                    editMode={editableRow === row.id}
+                    toggleEditMode={() => toggleEditMode(row.id)}
+                />
+            ),
+        },
+        {
+            header: "Actions",
+            cell: ({ row }) => (
+                <div>
+                    {editableRow === row.id ? (
+                        <div>
+                            <Button onClick={() => handleSubmit(row.id)}>
+                                Submit
+                            </Button>
+                            <Button onClick={handleDiscard}>Discard</Button>
+                        </div>
+                    ) : (
+                        <Button onClick={() => toggleEditMode(row.id)}>
+                            Edit
+                        </Button>
+                    )}
+                    {!editableRow && (
+                        <Button onClick={() => handleDelete(row.id)}>
+                            Delete
+                        </Button>
+                    )}
+                </div>
+            ),
+        },
+    ];
     const table = useReactTable({
         data,
         columns,
