@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ExpenseIncome;
+use App\Models\Tags;
 use Illuminate\Http\Request;
 
 class DeleteUpdateController extends Controller
@@ -31,6 +32,16 @@ class DeleteUpdateController extends Controller
         } catch (\Exception $e) {
             // Handle the exception, you might want to return a proper error response
             return response()->json(['error' => 'Error deleting data'], 500);
+        }
+    }
+
+    public function updateTag(Request $request, $id) {
+        try {
+            $updatingTag = Tags::findOrFail($id);
+            $updatingTag->update($request->all());
+            return response()->json(['message'=> 'Updated successfully'],200);
+        } catch (\Exception $th) {
+            return response()->json(['error'=> 'Error Updating Tag'],500);
         }
     }
 

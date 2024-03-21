@@ -8,6 +8,7 @@ import {
 } from "react-bootstrap";
 import EditExpenseIncome from "@/Components/EditExpenseIncome";
 import _ from "lodash";
+import ReactTable from "@/Components/ReactTable/ReactTable";
 
 const Balance = () => {
     const [data, setData] = useState([]);
@@ -211,7 +212,7 @@ const Balance = () => {
 
     return (
         <div>
-            <Table bordered hover variant="primary">
+            {/* <Table bordered hover variant="primary">
                 <thead className="bg-primary text-light">
                     <tr>
                         <th
@@ -414,7 +415,10 @@ const Balance = () => {
                         ? totalBalance.toFixed(2)
                         : "Loading..."}
                 </h2>
-            </div>
+            </div> */}
+            {data ? <ReactTable data={data}>
+
+            </ReactTable>: <p>Loading...</p>}
         </div>
     );
 };

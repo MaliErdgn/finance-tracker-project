@@ -39,6 +39,8 @@ Route::group(['prefix'=> '/api'], function () {
     Route::post("/create-tag", [SubmitDataController::class,"submitTag"]);
     Route::put("/update-data/{id}",[DeleteUpdateController::class, "update"]);
     Route::delete("/delete-data/{id}", [DeleteUpdateController::class, "delete"]);
+    Route::put("/update-tag/{id}",[DeleteUpdateController::class, "updateTag"]);
+    Route::delete("/delete-tag/{id}", [DeleteUpdateController::class, "deleteTag"]);
 });
 
 Route::get("/dashboard", function ()

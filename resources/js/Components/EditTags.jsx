@@ -5,8 +5,9 @@ import SelectForm from "./SelectForm";
 import InputForm from "./InputForm";
 import Button from "react-bootstrap/Button"
 import { useEffect } from "react";
+import axios from "axios"
 
-const EditTags = (id, data, categories) => {
+const EditTags = ({id, data, categories}) => {
     const [formData, setFormData] = useState({
         tag_name: "",
         category_id: "",
@@ -15,14 +16,13 @@ const EditTags = (id, data, categories) => {
     useEffect(() => {
         if (data && data.length > 0) {
             const initialData = data[0];
-
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 tag_name: initialData.tag_name,
                 category_id: initialData.category_id
             }))
         }
-    })
+    },[data])
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -36,7 +36,7 @@ const EditTags = (id, data, categories) => {
 
         try {
             console.log("Submitting: ", formData);
-            const response = await Axios.put(`/api/update-tag/${id}`, formData);
+            const response = await axios.put(`/api/update-tag/${id}`, formData);
             console.log("update Successfull: ", response.data)
             window.location.reload();
         } catch (error) {
@@ -50,7 +50,26 @@ const EditTags = (id, data, categories) => {
             alignItems: "center",
         }}>
             <Form onSubmit={handleSubmit}>
-
+                <InputForm
+                label="New Tag Name"
+                type="text"
+                name="tag_name"
+                value={formData.tag_name}
+                onChange={handleInputChange}
+                required={true}
+                />
+                <SelectForm
+                label="New Category"
+                type="select"
+                name="category_id"
+                onChange={handleInputChange}
+                options={categories}
+                optionKey="id"
+                value={formData.category_id}
+                optionValue="category_name"
+                required={true}
+                />
+                <Button type="submit" className="bg-slate-500">Update Tag</Button>
             </Form>
         </div>
     )
