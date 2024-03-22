@@ -31,7 +31,7 @@ export default function AmountCell({
                     whiteSpace={"nowrap"}
                     />
             ) : (
-                <div>{value}</div>
+                <div>{value} ₺</div>
             )}
         </>
     );

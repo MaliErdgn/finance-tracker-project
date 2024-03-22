@@ -231,7 +231,7 @@ const ReactTable = ({ data, categories, allTags, types, methods, handleCategoryC
                                 {row.getVisibleCells().map((cell) => (
                                     <Td
                                         key={cell.id}
-                                        className="border border-black"
+                                        className="border border-black text-center"
                                     >
                                         {flexRender(
                                             cell.column.columnDef.cell,
