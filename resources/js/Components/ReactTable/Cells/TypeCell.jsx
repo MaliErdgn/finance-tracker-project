@@ -1,22 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Menu, MenuList, MenuButton, MenuItem } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { useState } from "react";
 
-export default function TypeCell({
-    getValue,
-    onDataChange,
-    rowId,
-    editMode,
-    types
-}) {
-    const initialValue = getValue();
+const TypeCell = React.memo(({ initialValue, onDataChange, rowId, editMode, types }) => {
     const [value, setValue] = useState(initialValue);
 
     const handleSubmit = (selectedType) => {
         setValue(selectedType);
         onDataChange(rowId, selectedType);
     };
+
+    useEffect(() => {
+        setValue(initialValue);
+    }, [initialValue]);
 
     return (
         <>
@@ -41,4 +37,6 @@ export default function TypeCell({
             )}
         </>
     );
-}
+});
+
+export default TypeCell;

@@ -3,14 +3,13 @@ import { Button, Menu, MenuList, MenuButton, MenuItem } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
 export default function CategoryNameCell({
-    getValue,
+    initialValue,
     onDataChange,
     rowId,
     editMode,
     categories,
     onSelectCategory,
 }) {
-    const initialValue = getValue();
     const [value, setValue] = useState();
 
     useEffect(() => {

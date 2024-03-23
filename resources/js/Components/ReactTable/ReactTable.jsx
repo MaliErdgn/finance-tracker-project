@@ -7,7 +7,7 @@ import {
     getSortedRowModel,
 } from "@tanstack/react-table";
 import DescriptionCell from "./Cells/DescriptionCell";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AmountCell from "./Cells/AmountCell";
 import TypeCell from "./Cells/TypeCell";
 import TimeCell from "./Cells/TimeCell";
@@ -15,10 +15,17 @@ import TagNameCell from "./Cells/TagNameCell";
 import CategoryNameCell from "./Cells/CategoryNameCell";
 import MethodCell from "./Cells/MethodCell";
 
-const ReactTable = ({ data, categories, allTags, types, methods, handleCategoryChange, selectedCategoryId }) => {
+const ReactTable = ({
+    data,
+    categories,
+    allTags,
+    types,
+    methods,
+    handleCategoryChange,
+    selectedCategoryId,
+}) => {
     const [sorting, setSorting] = React.useState([]);
     const [editableRow, setEditableRow] = useState(null);
-
 
     const toggleEditMode = (rowId) => {
         if (editableRow === rowId) {
@@ -40,8 +47,8 @@ const ReactTable = ({ data, categories, allTags, types, methods, handleCategoryC
     };
 
     const handleDataChange = (rowId, newValue) => {
-            console.log("ID: ", rowId);
-            console.log("Value: ", newValue);
+        console.log("ID: ", rowId);
+        console.log("Value: ", newValue);
     };
     const columns = [
         {
@@ -49,7 +56,7 @@ const ReactTable = ({ data, categories, allTags, types, methods, handleCategoryC
             header: "Type",
             cell: ({ getValue, row }) => (
                 <TypeCell
-                    getValue={getValue}
+                    initialValue={data[row.id].type.type_name}
                     onDataChange={handleDataChange}
                     rowId={data[row.id].id}
                     editMode={editableRow === row.id}
@@ -62,70 +69,70 @@ const ReactTable = ({ data, categories, allTags, types, methods, handleCategoryC
             accessorKey: "amount",
             header: "Amount",
             size: 100,
-            cell: ({getValue, row}) => (
+            cell: ({ getValue, row }) => (
                 <AmountCell
-                getValue={getValue}
-                onDataChange={handleDataChange}
-                rowId={data[row.id].id}
-                editMode={editableRow === row.id}
-                toggleEditMode={() => toggleEditMode(row.id)}
-            />
+                    getValue={getValue}
+                    onDataChange={handleDataChange}
+                    rowId={data[row.id].id}
+                    editMode={editableRow === row.id}
+                    toggleEditMode={() => toggleEditMode(row.id)}
+                />
             ),
         },
         {
             accessorKey: "time",
             header: "Time",
-            cell: ({getValue,  row}) => (
+            cell: ({ getValue, row }) => (
                 <TimeCell
-                getValue={getValue}
-                onDataChange={handleDataChange}
-                rowId={data[row.id].id}
-                editMode={editableRow === row.id}
-                toggleEditMode={() => toggleEditMode(row.id)}
+                    getValue={getValue}
+                    onDataChange={handleDataChange}
+                    rowId={data[row.id].id}
+                    editMode={editableRow === row.id}
+                    toggleEditMode={() => toggleEditMode(row.id)}
                 />
             ),
         },
         {
             accessorKey: "tag.category.category_name",
             header: "Category Name",
-            cell: ({getValue,  row}) => (
+            cell: ({ getValue, row }) => (
                 <CategoryNameCell
-                getValue={getValue}
-                onDataChange={handleDataChange}
-                rowId={data[row.id].id}
-                editMode={editableRow === row.id}
-                toggleEditMode={() => toggleEditMode(row.id)}
-                categories={categories}
-                onSelectCategory={handleCategoryChange}
+                    initialValue={data[row.id].tag.category.category_name}
+                    onDataChange={handleDataChange}
+                    rowId={data[row.id].id}
+                    editMode={editableRow === row.id}
+                    toggleEditMode={() => toggleEditMode(row.id)}
+                    categories={categories}
+                    onSelectCategory={handleCategoryChange}
                 />
             ),
         },
         {
             accessorKey: "tag.tag_name",
             header: "Tag Name",
-            cell: ({getValue,  row}) => (
+            cell: ({ getValue, row }) => (
                 <TagNameCell
-                getValue={getValue}
-                onDataChange={handleDataChange}
-                rowId={data[row.id].id}
-                editMode={editableRow === row.id}
-                toggleEditMode={() => toggleEditMode(row.id)}
-                allTags={allTags}
-                selectedCategoryId={selectedCategoryId}
+                    initialValue={data[row.id].tag.tag_name}
+                    onDataChange={handleDataChange}
+                    rowId={data[row.id].id}
+                    editMode={editableRow === row.id}
+                    toggleEditMode={() => toggleEditMode(row.id)}
+                    allTags={allTags}
+                    selectedCategoryId={selectedCategoryId}
                 />
             ),
         },
         {
             accessorKey: "method.method_name",
             header: "Method",
-            cell: ({getValue,  row}) => (
+            cell: ({ getValue, row }) => (
                 <MethodCell
-                getValue={getValue}
-                onDataChange={handleDataChange}
-                rowId={data[row.id].id}
-                editMode={editableRow === row.id}
-                toggleEditMode={() => toggleEditMode(row.id)}
-                methods={methods}
+                    getValue={getValue}
+                    onDataChange={handleDataChange}
+                    rowId={data[row.id].id}
+                    editMode={editableRow === row.id}
+                    toggleEditMode={() => toggleEditMode(row.id)}
+                    methods={methods}
                 />
             ),
         },
