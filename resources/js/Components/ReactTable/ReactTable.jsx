@@ -97,7 +97,7 @@ const ReactTable = ({
             header: "Category Name",
             cell: ({ getValue, row }) => (
                 <CategoryNameCell
-                    initialValue={data[row.id].tag.category.category_name}
+                    initialValue={data[row.id].tag.category.category_name} //whats causing the problem
                     onDataChange={handleDataChange}
                     rowId={data[row.id].id}
                     editMode={editableRow === row.id}
