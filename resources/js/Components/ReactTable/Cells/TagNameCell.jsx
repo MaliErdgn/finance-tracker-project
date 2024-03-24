@@ -15,7 +15,7 @@ export default function TagNameCell({
     useEffect(() => {
         setValue(initialValue);
     }, [initialValue]);
-    console.log(selectedCategoryId)
+    // console.log(selectedCategoryId)
 
     const filteredTags = allTags.filter(tag => tag.category_id === parseInt(selectedCategoryId, 10));
 

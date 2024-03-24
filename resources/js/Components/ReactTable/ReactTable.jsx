@@ -71,7 +71,7 @@ const ReactTable = ({
             size: 100,
             cell: ({ getValue, row }) => (
                 <AmountCell
-                    getValue={getValue}
+                    initialValue={data[row.id].amount}
                     onDataChange={handleDataChange}
                     rowId={data[row.id].id}
                     editMode={editableRow === row.id}
@@ -83,8 +83,8 @@ const ReactTable = ({
             accessorKey: "time",
             header: "Time",
             cell: ({ getValue, row }) => (
-                <TimeCell
-                    getValue={getValue}
+                <TimeCell //TODO: No editing fucntionality.
+                    initialValue={data[row.id].time}
                     onDataChange={handleDataChange}
                     rowId={data[row.id].id}
                     editMode={editableRow === row.id}
@@ -127,7 +127,7 @@ const ReactTable = ({
             header: "Method",
             cell: ({ getValue, row }) => (
                 <MethodCell
-                    getValue={getValue}
+                    initialValue={data[row.id].method.method_name}
                     onDataChange={handleDataChange}
                     rowId={data[row.id].id}
                     editMode={editableRow === row.id}
