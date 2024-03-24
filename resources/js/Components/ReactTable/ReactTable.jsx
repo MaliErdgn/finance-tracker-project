@@ -42,8 +42,13 @@ const ReactTable = ({
         setEditableRow(null);
     };
 
-    const handleDelete = () => {
-        console.log("deleting data: ", data[0]);
+    const handleDelete = async (rowId) => {
+        try {
+            await axios.delete(`/api/delete-data/${data[rowId].id}`) //delete the corresponding data from the database
+            window.location.reload()
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const handleDataChange = (rowId, newValue) => {
