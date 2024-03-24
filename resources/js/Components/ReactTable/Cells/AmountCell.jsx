@@ -3,16 +3,15 @@ import { Input } from "@chakra-ui/react";
 import { useState } from "react";
 
 export default function AmountCell({
-    getValue,
+    initialValue,
     onDataChange,
     rowId,
     editMode,
 }) {
-    const initialValue = getValue();
     const [value, setValue] = useState(initialValue);
 
     const handleSubmit = () => {
-        onDataChange(rowId, valule);
+        onDataChange(rowId, value);
     };
     return (
         <>
