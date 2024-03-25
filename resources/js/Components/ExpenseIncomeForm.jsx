@@ -1,56 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Axios } from "axios";
-import Form from 'react-bootstrap/Form';
+import React from "react";
+import Form from "react-bootstrap/Form";
 import InputForm from "../Components/InputForm.jsx";
 import SelectForm from "../Components/SelectForm.jsx";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 
-
-const ExpenseIncomeForm = () => {
-    const [formData, setFormData] = useState({
-        type_id: "",
-        amount: "",
-        time: "",
-        description: "",
-        category: "",
-        tag_id: "",
-        method_id: "",
-    });
-    const [data, setData] = useState([])
-    const [categories, setCategories] = useState([]);
-    const [allTags, setAllTags] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState("");
-    const [filteredTags, setFilteredTags] = useState([]);
-    const [types, setTypes] = useState([]);
-    const [methods, setMethods] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [categoriesResponse, tagsResponse, typesResponse, methodsResponse, dataResponse] = await Promise.all([
-                    axios.get("/api/categories"),
-                    axios.get("/api/tags"),
-                    axios.get("/api/types"),
-                    axios.get("/api/methods"),
-                    axios.get("/api/balance")
-                ]);
-
-                setCategories(categoriesResponse.data);
-                setAllTags(tagsResponse.data);
-                setTypes(typesResponse.data);
-                setMethods(methodsResponse.data)
-                setData(dataResponse.data)
-
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-
-        fetchData();
-    }, []);
-
+const ExpenseIncomeForm = ({
+    categories,
+    allTags,
+    filteredTags,
+    setFilteredTags,
+    types,
+    methods,
+    formData,
+    setFormData,
+}) => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -59,8 +22,9 @@ const ExpenseIncomeForm = () => {
         });
 
         if (name === "category") {
-            setSelectedCategory(value);
-            const filteredTags = allTags.filter(tag => tag.category_id === parseInt(value, 10));
+            const filteredTags = allTags.filter(
+                (tag) => tag.category_id === parseInt(value, 10)
+            );
             setFilteredTags(filteredTags);
         }
     };
@@ -70,7 +34,10 @@ const ExpenseIncomeForm = () => {
 
         try {
             console.log("Submitting data:", formData);
-            const response = await axios.post("/api/submit-income-expense", formData);
+            const response = await axios.post(
+                "/api/submit-income-expense",
+                formData
+            );
 
             setFormData({
                 type_id: "",
@@ -90,7 +57,11 @@ const ExpenseIncomeForm = () => {
 
     return (
         <div>
-            <Form onSubmit={handleSubmit} method="POST" className="w-50 mx-auto mt-3">
+            <Form
+                onSubmit={handleSubmit}
+                method="POST"
+                className="w-50 mx-auto mt-3"
+            >
                 <SelectForm
                     label="Type"
                     type="select"
@@ -168,12 +139,16 @@ const ExpenseIncomeForm = () => {
                     required={false}
                 />
 
-                <Button variant="primary" className="mt-3 text-slate-950" type="submit">
+                <Button
+                    variant="primary"
+                    className="mt-3 text-slate-950"
+                    type="submit"
+                >
                     Submit
                 </Button>
             </Form>
         </div>
-    )
+    );
 };
 
 export default ExpenseIncomeForm;
