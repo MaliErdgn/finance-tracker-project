@@ -1,5 +1,6 @@
-import React from 'react';
-import NavBar from '@/Components/NavBar';
+import React from "react";
+import NavBar from "@/Components/NavBar";
+import "../bootstrap"
 const Layout = ({ children }) => {
     return (
         <div>
