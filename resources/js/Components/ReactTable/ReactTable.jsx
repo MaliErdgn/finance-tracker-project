@@ -7,13 +7,15 @@ import {
     getSortedRowModel,
 } from "@tanstack/react-table";
 import DescriptionCell from "./Cells/DescriptionCell";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AmountCell from "./Cells/AmountCell";
 import TypeCell from "./Cells/TypeCell";
 import TimeCell from "./Cells/TimeCell";
 import TagNameCell from "./Cells/TagNameCell";
 import CategoryNameCell from "./Cells/CategoryNameCell";
 import MethodCell from "./Cells/MethodCell";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const ReactTable = ({
     data,
@@ -44,8 +46,8 @@ const ReactTable = ({
 
     const handleDelete = async (rowId) => {
         try {
-            await axios.delete(`/api/delete-data/${data[rowId].id}`) //delete the corresponding data from the database
-            window.location.reload()
+            await axios.delete(`/api/delete-data/${data[rowId].id}`); //delete the corresponding data from the database
+            window.location.reload();
         } catch (error) {
             console.error(error);
         }
@@ -160,19 +162,19 @@ const ReactTable = ({
                 <div>
                     {editableRow === row.id ? (
                         <div>
-                            <Button onClick={() => handleSubmit(row.id)}>
+                            <Button onClick={() => handleSubmit(row.id)} className="mr-3">
                                 Submit
                             </Button>
                             <Button onClick={handleDiscard}>Discard</Button>
                         </div>
                     ) : (
-                        <Button onClick={() => toggleEditMode(row.id)}>
-                            Edit
+                        <Button onClick={() => toggleEditMode(row.id)} className="mr-3">
+                            <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon>
                         </Button>
                     )}
                     {!editableRow && (
                         <Button onClick={() => handleDelete(row.id)}>
-                            Delete
+                            <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
                         </Button>
                     )}
                 </div>
@@ -189,10 +191,25 @@ const ReactTable = ({
         getSortedRowModel: getSortedRowModel(),
         getCoreRowModel: getCoreRowModel(),
     });
+    const getRowBgColor = (rowData) => {
+        //Make the background of the row red or green depending on the type of the data
+        const typeName = rowData?.type?.type_name;
+        if (typeName === "Expense") {
+            return {
+                background: `linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), var(--chakra-colors-red-500)`,
+            };
+        } else if (typeName === "Income") {
+            return {
+                background: `linear-gradient(rgba(0,0,0, 0.15), rgba(0, 0, 0, 0.15)), var(--chakra-colors-green-500)`,
+            };
+        }
+        return null; // Default background color
+    };
+
     return (
         <>
             <Box>
-                <Table variant="striped" colorScheme="gray">
+                <Table colorScheme="gray">
                     <Thead>
                         <Tr>
                             {table.getHeaderGroups().map((headerGroup) => (
@@ -239,11 +256,15 @@ const ReactTable = ({
 
                     <Tbody>
                         {table.getRowModel().rows.map((row) => (
-                            <Tr key={row.id}>
+                            <Tr
+                                key={row.id}
+                                style={getRowBgColor(row.original)}
+                                >
+                                {console.log(row.original)}
                                 {row.getVisibleCells().map((cell) => (
                                     <Td
                                         key={cell.id}
-                                        className="border border-black text-center"
+                                        className={`border border-black text-center`}
                                     >
                                         {flexRender(
                                             cell.column.columnDef.cell,

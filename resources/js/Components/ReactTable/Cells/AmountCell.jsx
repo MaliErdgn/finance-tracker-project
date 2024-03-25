@@ -13,6 +13,14 @@ export default function AmountCell({
     const handleSubmit = () => {
         onDataChange(rowId, value);
     };
+
+    const getValue = (theValue) => {
+        if (theValue % 1 !== 0) {
+            return value.toFixed(2);
+        } else {
+            return value.toString();
+        }
+    }
     return (
         <>
             {editMode ? (
@@ -30,7 +38,7 @@ export default function AmountCell({
                     whiteSpace={"nowrap"}
                     />
             ) : (
-                <div>{value} ₺</div>
+                <div>{getValue(value)} ₺</div>
             )}
         </>
     );

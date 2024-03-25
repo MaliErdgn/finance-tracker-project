@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('expense_income', function (Blueprint $table) {
             $table->id();
-            $table->integer("amount");
+            $table->float("amount");
             $table->date("time");
             $table->string("description")->nullable();
             $table->unsignedBigInteger("type_id");

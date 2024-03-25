@@ -16,7 +16,6 @@ export default function TagNameCell({
         setValue(initialValue);
     }, [initialValue]);
     // console.log(selectedCategoryId)
-
     const filteredTags = allTags.filter(tag => tag.category_id === parseInt(selectedCategoryId, 10));
 
     const handleSelectTag = (selectedTag) => {

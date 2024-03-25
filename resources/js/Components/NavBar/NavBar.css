@@ -1,0 +1,11 @@
+.navbar .nav-link:hover {
+    color: var(--chakra-colors-gray-400);
+}
+
+.navbar .nav-link {
+    color: var(--bs-white)
+}
+
+.navbar {
+    background: var(--chakra-colors-chakra-body-bg);
+}
