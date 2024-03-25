@@ -5,9 +5,6 @@ import { useState } from "react";
 
 export default function TimeCell({
     initialValue,
-    onDataChange,
-    rowId,
-    editMode,
 }) {
     const [value, setValue] = useState();
 
@@ -17,12 +14,7 @@ export default function TimeCell({
 
     return (
         <>
-            {editMode ? ( // return these if the user is editing
-                <Menu></Menu>
-            ) : (
-                // return these if the user is not editing. (Just the data itself)
-                <div>{value}</div>
-            )}
+            <div>{value}</div>
         </>
     );
 }

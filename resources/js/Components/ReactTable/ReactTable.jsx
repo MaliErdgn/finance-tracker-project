@@ -26,6 +26,15 @@ const ReactTable = ({
     handleCategoryChange,
     selectedCategoryId,
 }) => {
+    const [formData, setFormData] = useState({
+        type_id: "",
+        amount: "",
+        time: "",
+        description: "",
+        category: "",
+        tag_id: "",
+        method_id: "",
+    });
     const [sorting, setSorting] = React.useState([]);
     const [editableRow, setEditableRow] = useState(null);
 
@@ -64,9 +73,10 @@ const ReactTable = ({
             cell: ({ getValue, row }) => (
                 <TypeCell
                     initialValue={data[row.id].type.type_name}
+                    formData={formData}
+                    setFormData={setFormData}
                     onDataChange={handleDataChange}
                     rowId={data[row.id].id}
-                    editMode={editableRow === row.id}
                     toggleEditMode={() => toggleEditMode(row.id)}
                     types={types}
                 />
@@ -81,7 +91,6 @@ const ReactTable = ({
                     initialValue={data[row.id].amount}
                     onDataChange={handleDataChange}
                     rowId={data[row.id].id}
-                    editMode={editableRow === row.id}
                     toggleEditMode={() => toggleEditMode(row.id)}
                 />
             ),
@@ -94,7 +103,6 @@ const ReactTable = ({
                     initialValue={data[row.id].time}
                     onDataChange={handleDataChange}
                     rowId={data[row.id].id}
-                    editMode={editableRow === row.id}
                     toggleEditMode={() => toggleEditMode(row.id)}
                 />
             ),
@@ -107,7 +115,6 @@ const ReactTable = ({
                     initialValue={data[row.id].tag.category.category_name} //whats causing the problem
                     onDataChange={handleDataChange}
                     rowId={data[row.id].id}
-                    editMode={editableRow === row.id}
                     toggleEditMode={() => toggleEditMode(row.id)}
                     categories={categories}
                     onSelectCategory={handleCategoryChange}
@@ -122,7 +129,6 @@ const ReactTable = ({
                     initialValue={data[row.id].tag.tag_name}
                     onDataChange={handleDataChange}
                     rowId={data[row.id].id}
-                    editMode={editableRow === row.id}
                     toggleEditMode={() => toggleEditMode(row.id)}
                     allTags={allTags}
                     selectedCategoryId={selectedCategoryId}
@@ -137,7 +143,6 @@ const ReactTable = ({
                     initialValue={data[row.id].method.method_name}
                     onDataChange={handleDataChange}
                     rowId={data[row.id].id}
-                    editMode={editableRow === row.id}
                     toggleEditMode={() => toggleEditMode(row.id)}
                     methods={methods}
                 />
@@ -148,10 +153,9 @@ const ReactTable = ({
             header: "Description",
             cell: ({ getValue, row }) => (
                 <DescriptionCell
-                    getValue={getValue}
+                    initialValue={data[row.id].description}
                     onDataChange={handleDataChange}
                     rowId={data[row.id].id}
-                    editMode={editableRow === row.id}
                     toggleEditMode={() => toggleEditMode(row.id)}
                 />
             ),
@@ -162,13 +166,19 @@ const ReactTable = ({
                 <div>
                     {editableRow === row.id ? (
                         <div>
-                            <Button onClick={() => handleSubmit(row.id)} className="mr-3">
+                            <Button
+                                onClick={() => handleSubmit(row.id)}
+                                className="mr-3"
+                            >
                                 Submit
                             </Button>
                             <Button onClick={handleDiscard}>Discard</Button>
                         </div>
                     ) : (
-                        <Button onClick={() => toggleEditMode(row.id)} className="mr-3">
+                        <Button
+                            onClick={() => toggleEditMode(row.id)}
+                            className="mr-3"
+                        >
                             <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon>
                         </Button>
                     )}
@@ -259,7 +269,7 @@ const ReactTable = ({
                             <Tr
                                 key={row.id}
                                 style={getRowBgColor(row.original)}
-                                >
+                            >
                                 {console.log(row.original)}
                                 {row.getVisibleCells().map((cell) => (
                                     <Td
