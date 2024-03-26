@@ -33,6 +33,8 @@ import MethodCell from "./Cells/MethodCell";
 import EditExpInc from "../EditExpInc";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import EditButton from '../Buttons/EditButton/EditButton';
+import DeleteButton from "../Buttons/DeleteButton/DeleteButton";
 
 const ReactTable = ({
     data,
@@ -185,16 +187,14 @@ const ReactTable = ({
             header: "Actions",
             cell: ({ row }) => (
                 <div>
-                    <Button
-                        onClick={() => toggleEditMode(row.id)}
-                        className="mr-3"
-                    >
-                        <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon>
-                    </Button>
+                    <EditButton
+                    handleEdit={() => toggleEditMode(row.id)}
+                    classNames="mr-3"
+                    />
 
-                    <Button onClick={() => handleDelete(row.id)}>
-                        <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
-                    </Button>
+                    <DeleteButton
+                    handleDelete={() => handleDelete(row.id)}
+                    />
                 </div>
             ),
         },

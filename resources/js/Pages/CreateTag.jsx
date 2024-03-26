@@ -1,11 +1,22 @@
 import React, { useState } from "react";
-import { Form, Button, Table, ToastContainer, Toast } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import InputForm from "@/Components/InputForm";
 import SelectForm from "@/Components/SelectForm";
-import { Axios } from "axios";
 import { useEffect } from "react";
+import EditButton from "@/Components/Buttons/EditButton/EditButton";
+import DeleteButton from "@/Components/Buttons/DeleteButton/DeleteButton";
+import {
+    Table,
+    Button,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+} from "@chakra-ui/react";
 import EditTags from "@/Components/EditTags";
-import { useRef } from "react";
 
 const CreateTag = () => {
     const [formData, setFormData] = useState({
@@ -14,10 +25,13 @@ const CreateTag = () => {
     });
     const [categories, setCategories] = useState([]);
     const [tags, setTags] = useState([]);
-    const [isUpdating, setIsUpdating] = useState(false);
     const [selectedTagId, setSelectedTagId] = useState();
     const [selectedData, setSelectedData] = useState();
-    const toastRef = useRef(null);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleCancelEdit = () => {
+        setShowModal(false); // Hide the edit form when cancelling
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -61,30 +75,26 @@ const CreateTag = () => {
     };
 
     const handleEdit = (id) => {
-        setIsUpdating(true);
         setSelectedTagId(id);
-        setSelectedData(tags.filter((item) => item.id === id));
-        const innerContent = toastRef.current.querySelector("#toast-container");
-        if (innerContent) {
-            console.log("Scrolling to inner content:", innerContent);
-            innerContent.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
-        } else {
-            console.log("Inner content not found or not ready:", innerContent);
-        }
+        setSelectedData(tags.filter((item) => item.id === id)); //preload the form
+        setShowModal(id) //Open up the modal to show the form
     };
 
-
-
     const handleDelete = async (id) => {
-        console.log("Delete Tag id: ", id);
+        setSelectedData(tags.filter((item) => item.id === id))
+        console.log("Deleting Tag: ", selectedData);
+        try {
+            await axios.delete(`/api/delete-tag/${selectedData[0].id}`) //send a request to delete the tag
+            console.log("Data Deleted Successfully")
+            window.location.reload()
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
         <>
             <div className="relative">
-                {isUpdating && (
-                    <div className="fixed inset-0 bg-gray-700 opacity-50 z-50" onClick={() => setIsUpdating(false)}></div>
-                )}
                 <Form onSubmit={handleSubmit} method="POST">
                     <InputForm
                         label="Tag Name"
@@ -114,8 +124,6 @@ const CreateTag = () => {
                 </Form>
                 {categories.map((category) => (
                     <Table
-                        bordered
-                        hover
                         variant="primary"
                         className="mt-5"
                         key={category.id}
@@ -143,61 +151,38 @@ const CreateTag = () => {
                                             {tag.tag_name}
                                         </td>
                                         <td>
-                                            {" "}
-                                            <Button
-                                                type="button"
-                                                variant="info"
-                                                className="mr-3 bg-info"
-                                                onClick={() =>
+                                            <EditButton
+                                                handleEdit={() =>
                                                     handleEdit(tag.id)
                                                 }
-                                            >
-                                                Edit
-                                            </Button>
-                                            {/* <Button
-                                                type="button"
-                                                variant="danger"
-                                                className="bg-danger"
-                                                onClick={() =>
+                                                className="mr-3"
+                                            />
+                                            <DeleteButton
+                                                handleDelete={() =>
                                                     handleDelete(tag.id)
                                                 }
-                                            >
-                                                Delete
-                                            </Button> */}
+                                            />
                                         </td>
                                     </tr>
                                 ))}
                         </tbody>
                     </Table>
                 ))}
-                <div ref={toastRef}>
-                    <ToastContainer position="middle-center" id="toast-container">
-                        <Toast
-                            bg="primary"
-                            show={isUpdating}
-                            onClose={() => setIsUpdating(false)}
-                        >
-                            <Toast.Header closeLabel="Cancel" closeButton={false}>
-                                <strong>Edit Data </strong>
-                                <Button
-                                    type="button"
-                                    variant="primary"
-                                    className="ml-auto text-slate-950"
-                                    onClick={() => setIsUpdating(false)}
-                                >
-                                    Close
-                                </Button>
-                            </Toast.Header>
-                            <Toast.Body className="d-flex justify-content-center align-items-center">
-                                <EditTags
-                                    id={selectedTagId}
-                                    data={selectedData}
-                                    categories={categories}
-                                />
-                            </Toast.Body>
-                        </Toast>
-                    </ToastContainer>
-                </div>
+                <Modal isOpen={showModal} onClose={handleCancelEdit}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Edit Tag</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <EditTags
+                                id={selectedTagId}
+                                data={selectedData}
+                                categories={categories}
+                            />
+                        </ModalBody>
+                        <ModalFooter></ModalFooter>
+                    </ModalContent>
+                </Modal>
             </div>
         </>
     );

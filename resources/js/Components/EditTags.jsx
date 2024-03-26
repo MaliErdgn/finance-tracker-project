@@ -44,12 +44,8 @@ const EditTags = ({id, data, categories}) => {
         }
     };
     return (
-        <div style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-        }}>
-            <Form onSubmit={handleSubmit}>
+        <div>
+            <form onSubmit={handleSubmit}>
                 <InputForm
                 label="New Tag Name"
                 type="text"
@@ -69,8 +65,8 @@ const EditTags = ({id, data, categories}) => {
                 optionValue="category_name"
                 required={true}
                 />
-                <Button type="submit" className="bg-slate-500">Update Tag</Button>
-            </Form>
+                <button type="submit">Update Tag</button>
+            </form>
         </div>
     )
 };

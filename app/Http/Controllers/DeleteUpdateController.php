@@ -45,4 +45,18 @@ class DeleteUpdateController extends Controller
         }
     }
 
+    public function deleteTag($id) {
+        try {
+            //Find the tag with sent ID
+            $deleteingTag = Tags::findOrFail($id);
+            //Delete that tag
+            $deleteingTag->delete();
+            //return a success message
+            return response()->json(["message" => "Tag deleted successfully"], 200);
+        } catch (\Exception $e) {
+            //handling the exeption
+            return response()->json(["error" => "Error deleting tag"], 500);
+        }
+    }
+
 }
