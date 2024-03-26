@@ -185,29 +185,16 @@ const ReactTable = ({
             header: "Actions",
             cell: ({ row }) => (
                 <div>
-                    {editableRow === row.id ? (
-                        <div>
-                            <Button
-                                onClick={() => handleSubmit(row.id)}
-                                className="mr-3"
-                            >
-                                Submit
-                            </Button>
-                            <Button onClick={handleDiscard}>Discard</Button>
-                        </div>
-                    ) : (
-                        <Button
-                            onClick={() => toggleEditMode(row.id)}
-                            className="mr-3"
-                        >
-                            <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon>
-                        </Button>
-                    )}
-                    {!editableRow && (
-                        <Button onClick={() => handleDelete(row.id)}>
-                            <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
-                        </Button>
-                    )}
+                    <Button
+                        onClick={() => toggleEditMode(row.id)}
+                        className="mr-3"
+                    >
+                        <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon>
+                    </Button>
+
+                    <Button onClick={() => handleDelete(row.id)}>
+                        <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
+                    </Button>
                 </div>
             ),
         },

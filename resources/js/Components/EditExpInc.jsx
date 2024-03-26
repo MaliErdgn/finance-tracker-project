@@ -12,48 +12,50 @@ const EditExpInc = ({
     onCancel,
 }) => {
     const [editedFormData, setEditedFormData] = useState({ ...formData });
+
     const [showToast, setShowToast] = useState(false);
     const [filteredTags, setFilteredTags] = useState([]);
 
     useEffect(() => {
-        if (editedFormData.category) {
+        if (editedFormData.tag.category) {
             const initialFilteredTags = allTags.filter(
-                (tag) => tag.category_id === parseInt(editedFormData.category)
+                (tag) =>
+                    tag.category_id === parseInt(editedFormData.tag.category.id)
             );
             setFilteredTags(initialFilteredTags);
         }
     }, [editedFormData.category_id, allTags]);
 
+    console.log(editedFormData)
     useEffect(() => {
         // Update the editedFormData when the formData changes
         setEditedFormData((prevFormData) => ({ ...prevFormData, ...formData }));
+        setEditedFormData((prevFormData) => ({...prevFormData, category: prevFormData.tag.category_id}))
     }, [formData]);
-
+    console.log(editedFormData)
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setEditedFormData((prevFormData) => ({
             ...prevFormData,
             [name]: value,
         }));
-        console.log("name:", name, " value:", value)
 
         // If the category changes, reset tag_id and filter tags accordingly
         if (name === "category") {
             const filteredTags = allTags.filter(
                 (tag) => tag.category_id === parseInt(value)
-                );
-            console.log(editedFormData)
+            );
             setEditedFormData((prevFormData) => ({
                 ...prevFormData,
                 [name]: value,
             }));
             setFilteredTags(filteredTags);
         }
-    }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Updating Data", editedFormData)
+        console.log("Updating Data", editedFormData);
         // Send the updated data to the backend
         axios
             .put(`/api/update-data/${editedFormData.id}`, editedFormData)
@@ -61,7 +63,7 @@ const EditExpInc = ({
                 console.log("Balance updated successfully", response.data);
                 onCancel(); // Close the editing form after successful update
                 setShowToast(false); // Hide the toast after update
-                window.location.reload()
+                window.location.reload();
             })
             .catch((error) => console.error("Failed to update balance", error));
     };
@@ -108,7 +110,7 @@ const EditExpInc = ({
                     label="Category"
                     type="select"
                     name="category"
-                    value={editedFormData.tag.category_name}
+                    value={editedFormData.category}
                     onChange={handleInputChange}
                     options={categories}
                     optionKey="id"
@@ -121,7 +123,7 @@ const EditExpInc = ({
                     name="tag_id"
                     value={editedFormData.tag_id}
                     onChange={handleInputChange}
-                    options={filteredTags}
+                    options={filteredTags || []}
                     optionKey="id"
                     optionValue="tag_name"
                     required={false}
