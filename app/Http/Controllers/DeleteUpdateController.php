@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ExpenseIncome;
 use App\Models\Tags;
 use Illuminate\Http\Request;
+use Symfony\Component\Console\Logger\ConsoleLogger;
 
 class DeleteUpdateController extends Controller
 {
@@ -12,6 +13,8 @@ class DeleteUpdateController extends Controller
         try {
             $balance = ExpenseIncome::findOrFail($id);
             $balance->update($request->all());
+
+            logger("adsad")->info("asdasd", ["id"=> $id]);
 
             return response()->json(["message" => "Updated Successfully"]);
         } catch (\Exception $e) {

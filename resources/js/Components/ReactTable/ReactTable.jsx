@@ -1,5 +1,21 @@
 import React from "react";
-import { Box, Table, Thead, Tbody, Tr, Th, Td, Button } from "@chakra-ui/react";
+import {
+    Box,
+    Table,
+    Thead,
+    Tbody,
+    Tr,
+    Th,
+    Td,
+    Button,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+} from "@chakra-ui/react";
 import {
     useReactTable,
     getCoreRowModel,
@@ -14,6 +30,7 @@ import TimeCell from "./Cells/TimeCell";
 import TagNameCell from "./Cells/TagNameCell";
 import CategoryNameCell from "./Cells/CategoryNameCell";
 import MethodCell from "./Cells/MethodCell";
+import EditExpInc from "../EditExpInc";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
@@ -35,16 +52,20 @@ const ReactTable = ({
         tag_id: "",
         method_id: "",
     });
-    const [sorting, setSorting] = React.useState([]);
+    const [sorting, setSorting] = useState([]);
+    const [showModal, setShowModal] = useState(false);
     const [editableRow, setEditableRow] = useState(null);
 
     const toggleEditMode = (rowId) => {
-        if (editableRow === rowId) {
-            setEditableRow(null);
-        } else {
-            setEditableRow(rowId);
-        }
+        setEditableRow(rowId);
+        setShowModal(true); // Show the edit form when toggling edit mode
     };
+
+    const handleCancelEdit = () => {
+        setEditableRow(null);
+        setShowModal(false); // Hide the edit form when cancelling
+    };
+
     const handleSubmit = (rowId) => {
         setEditableRow(null);
     };
@@ -270,7 +291,6 @@ const ReactTable = ({
                                 key={row.id}
                                 style={getRowBgColor(row.original)}
                             >
-                                {console.log(row.original)}
                                 {row.getVisibleCells().map((cell) => (
                                     <Td
                                         key={cell.id}
@@ -286,6 +306,24 @@ const ReactTable = ({
                         ))}
                     </Tbody>
                 </Table>
+                <Modal isOpen={showModal} onClose={handleCancelEdit}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Edit Data</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <EditExpInc
+                                formData={data[editableRow]}
+                                types={types}
+                                categories={categories}
+                                allTags={allTags}
+                                methods={methods}
+                                onCancel={handleCancelEdit}
+                            />
+                        </ModalBody>
+                        <ModalFooter></ModalFooter>
+                    </ModalContent>
+                </Modal>
             </Box>
         </>
     );
