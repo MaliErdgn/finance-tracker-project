@@ -13,9 +13,6 @@ class DeleteUpdateController extends Controller
         try {
             $balance = ExpenseIncome::findOrFail($id);
             $balance->update($request->all());
-
-            logger("adsad")->info("asdasd", ["id"=> $id]);
-
             return response()->json(["message" => "Updated Successfully"]);
         } catch (\Exception $e) {
             return response()->json(["error"=>"failed to update"],500);

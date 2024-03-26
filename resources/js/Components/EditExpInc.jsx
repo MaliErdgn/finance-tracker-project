@@ -35,16 +35,17 @@ const EditExpInc = ({
             ...prevFormData,
             [name]: value,
         }));
+        console.log("name:", name, " value:", value)
 
         // If the category changes, reset tag_id and filter tags accordingly
         if (name === "category") {
             const filteredTags = allTags.filter(
                 (tag) => tag.category_id === parseInt(value)
-            );
-            console.log(filteredTags)
+                );
+            console.log(editedFormData)
             setEditedFormData((prevFormData) => ({
                 ...prevFormData,
-                tag_id: "", // Reset tag_id when category changes
+                [name]: value,
             }));
             setFilteredTags(filteredTags);
         }
@@ -77,7 +78,7 @@ const EditExpInc = ({
                     options={types}
                     optionKey="id"
                     optionValue="type_name"
-                    required={true}
+                    required={false}
                 />
                 <InputForm
                     type="number"
@@ -107,12 +108,12 @@ const EditExpInc = ({
                     label="Category"
                     type="select"
                     name="category"
-                    value={editedFormData.tag.category_id}
+                    value={editedFormData.tag.category_name}
                     onChange={handleInputChange}
                     options={categories}
                     optionKey="id"
                     optionValue="category_name"
-                    required={true}
+                    required={false}
                 />
                 <SelectForm
                     label="Tag"
@@ -120,10 +121,10 @@ const EditExpInc = ({
                     name="tag_id"
                     value={editedFormData.tag_id}
                     onChange={handleInputChange}
-                    options={filteredTags || []}
+                    options={filteredTags}
                     optionKey="id"
                     optionValue="tag_name"
-                    required={true}
+                    required={false}
                 />
                 <SelectForm
                     label="Method"
@@ -134,7 +135,7 @@ const EditExpInc = ({
                     options={methods}
                     optionKey="id"
                     optionValue="method_name"
-                    required={true}
+                    required={false}
                 />
 
                 <button type="submit">Update Balance</button>
