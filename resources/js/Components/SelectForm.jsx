@@ -1,8 +1,7 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 
-export default function SelectForm({ label, name, value, onChange, classNames, required, options, optionKey, optionValue }) {
-    const className = `form-control ${classNames || ""}`;
+export default function SelectForm({ label, name, value, onChange, className, required, options, optionKey, optionValue }) {
 
     return (
         <Form.Group className="mb-3">

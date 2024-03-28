@@ -7,13 +7,13 @@ const InputForm = ({
     name,
     value,
     onChange,
-    classNames,
+    className,
     required,
     style,
     rows,
 }) => {
     return (
-        <Form.Group className={classNames}>
+        <Form.Group className={className}>
             <Form.Label>{label}</Form.Label>
             <Form.Control
                 type={type}

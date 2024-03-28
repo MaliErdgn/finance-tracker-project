@@ -8,7 +8,7 @@ import { faHome } from "@fortawesome/free-solid-svg-icons";
 
 const NavBar = () => {
     return (
-        <Navbar className="text-white">
+        <Navbar className="text-white border-bottom border-black">
             <Container>
                 <Navbar.Brand href={route("dashboard")} className="nav-link">
                     <FontAwesomeIcon icon={faHome}></FontAwesomeIcon>
@@ -38,9 +38,9 @@ const NavBar = () => {
                     <Nav.Link
                         className="nav-link"
                         as={InertiaLink}
-                        href={route("create-tag")}
+                        href={route("tags")}
                     >
-                        Create Tag
+                        Tags
                     </Nav.Link>
                 </Nav>
             </Container>

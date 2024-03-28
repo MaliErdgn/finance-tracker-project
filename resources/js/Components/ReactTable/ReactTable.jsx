@@ -31,10 +31,9 @@ import TagNameCell from "./Cells/TagNameCell";
 import CategoryNameCell from "./Cells/CategoryNameCell";
 import MethodCell from "./Cells/MethodCell";
 import EditExpInc from "../EditExpInc";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import EditButton from '../Buttons/EditButton/EditButton';
+import EditButton from "../Buttons/EditButton/EditButton";
 import DeleteButton from "../Buttons/DeleteButton/DeleteButton";
+import { css } from "@emotion/react";
 
 const ReactTable = ({
     data,
@@ -186,15 +185,13 @@ const ReactTable = ({
         {
             header: "Actions",
             cell: ({ row }) => (
-                <div>
+                <div className="flex gap-2">
                     <EditButton
-                    handleEdit={() => toggleEditMode(row.id)}
-                    classNames="mr-3"
+                        handleEdit={() => toggleEditMode(row.id)}
+                        classNames=""
                     />
 
-                    <DeleteButton
-                    handleDelete={() => handleDelete(row.id)}
-                    />
+                    <DeleteButton handleDelete={() => handleDelete(row.id)} />
                 </div>
             ),
         },
@@ -215,6 +212,9 @@ const ReactTable = ({
         if (typeName === "Expense") {
             return {
                 background: `linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), var(--chakra-colors-red-500)`,
+                hover: {
+                    background: `var(--chakra-colors-red-600)`,
+                },
             };
         } else if (typeName === "Income") {
             return {
@@ -224,10 +224,20 @@ const ReactTable = ({
         return null; // Default background color
     };
 
+    const getRowHoverColor = (rowData) => {
+        const typeName = rowData?.type?.type_name;
+        if (typeName === "Expense") {
+            return "var(--chakra-colors-red-600)";
+        } else if (typeName === "Income") {
+            return "var(--chakra-colors-green-600)";
+        }
+        return null; // Default hover color
+    };
+
     return (
         <>
             <Box>
-                <Table colorScheme="gray">
+                <Table colorScheme="">
                     <Thead>
                         <Tr>
                             {table.getHeaderGroups().map((headerGroup) => (
@@ -277,7 +287,14 @@ const ReactTable = ({
                             <Tr
                                 key={row.id}
                                 style={getRowBgColor(row.original)}
-                            >
+                                css={css`
+                                    &:hover {
+                                        background-color: ${getRowHoverColor(
+                                            row.original
+                                        )} !important;
+                                    }
+                                `}
+                                >
                                 {row.getVisibleCells().map((cell) => (
                                     <Td
                                         key={cell.id}

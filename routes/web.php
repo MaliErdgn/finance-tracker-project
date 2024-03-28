@@ -57,9 +57,9 @@ Route::get("/insights", function() {
     return Inertia::render("Insights", []);
 })->name("insights");
 
-Route::get("/create-tag", function() {
+Route::get("/tags", function() {
     return Inertia::render("CreateTag", []);
-})->name("create-tag");
+})->name("tags");
 
 
 
