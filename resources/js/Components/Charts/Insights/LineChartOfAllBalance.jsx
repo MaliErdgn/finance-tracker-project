@@ -49,7 +49,7 @@ const LineChartOfAllBalance = ({ datas }) => {
             options: {
                 // Add any chart options here
                 onComplete: function() {
-                    setChartImage(lineChartOfAllBalanceRef.current.toDataURL("image/jpeg")); //??? gotta fix the previews
+                    setChartImage(lineChartOfAllBalanceRef.current.toDataURL("image/jpeg")); //?? gotta fix the previews
                 }
             },
         });
