@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import InputForm from "../Components/InputForm.jsx";
 import SelectForm from "../Components/SelectForm.jsx";
@@ -14,6 +14,8 @@ const ExpenseIncomeForm = ({
     formData,
     setFormData,
 }) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -30,6 +32,7 @@ const ExpenseIncomeForm = ({
     };
 
     const handleSubmit = async (e) => {
+        setIsSubmitting(true);
         e.preventDefault();
 
         try {
@@ -48,10 +51,12 @@ const ExpenseIncomeForm = ({
                 tag_id: "",
                 method_id: "",
             });
+            setIsSubmitting(false);
 
             console.log("Data submitted successfully:", response.data);
         } catch (error) {
             console.error("Data submit unsuccessful", error);
+            setIsSubmitting(false);
         }
     };
 
@@ -140,9 +145,11 @@ const ExpenseIncomeForm = ({
                 />
 
                 <Button
+                    disabled={isSubmitting}
                     variant="primary"
-                    className="mt-3 text-slate-950"
+                    className={`mt-3 text-slate-950`}
                     type="submit"
+                    style={{ cursor: isSubmitting ? "progress" : "", pointerEvents: "auto" }}
                 >
                     Submit
                 </Button>
