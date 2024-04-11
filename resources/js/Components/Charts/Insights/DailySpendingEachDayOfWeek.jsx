@@ -97,10 +97,6 @@ const DailySpendingEachDayOfWeek = ({ datas }) => {
 
         return <Bar data={chartData} options={chartOptions} />;
     } else {
-        console.log(
-            "filteredData is empty or does not contain valid elements."
-        );
-        // Return null or a placeholder component if there is no data to display
         return null;
     }
 };

@@ -8,22 +8,14 @@ const LineChartOfAllBalance = ({ datas }) => {
     useEffect(() => {
         if (!datas || datas.length === 0) return;
 
-        // Aggregate spending data by date
         const aggregatedData = datas.reduce((accumulator, current) => {
             const date = new Date(current.time);
-            const formattedDate = `${
-                date.getMonth() + 1
-            }/${date.getDate()}/${date.getFullYear()}`;
-            const amount =
-                current.type.type_name === "Expense"
-                    ? -current.amount
-                    : current.amount; // Convert expense to negative value
-            accumulator[formattedDate] =
-                (accumulator[formattedDate] || 0) + amount;
+            const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+            const amount = current.type.type_name === "Expense" ? -current.amount : current.amount;
+            accumulator[formattedDate] = (accumulator[formattedDate] || 0) + amount;
             return accumulator;
         }, {});
 
-        // Calculate cumulative balance
         const labels = Object.keys(aggregatedData);
         let cumulativeBalance = 0;
         const cumulativeBalances = labels.map((date) => {
@@ -47,10 +39,12 @@ const LineChartOfAllBalance = ({ datas }) => {
                 ],
             },
             options: {
-                // Add any chart options here
-                onComplete: function() {
-                    setChartImage(lineChartOfAllBalanceRef.current.toDataURL("image/jpeg")); //?? gotta fix the previews
-                }
+                animation: {
+                    onComplete: () => {
+                        // Ensure the chartImage state is updated in a functional update to capture current chart state
+                        setChartImage(lineChart.toBase64Image()); // Correctly call toBase64Image on the chart instance
+                    },
+                },
             },
         });
 
